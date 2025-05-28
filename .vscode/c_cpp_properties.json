@@ -1,0 +1,18 @@
+{
+  "configurations": [
+    {
+      "name": "XC8",
+      "compilerPath": "/opt/microchip/xc8/v3.00/bin/xc8-cc",
+      "includePath": [
+        "${workspaceFolder}/RTOS_V25.X/**",
+        "/opt/microchip/xc8/v3.00/pic/include",
+        "/opt/microchip/xc8/v3.00/pic/include/proc",
+        "/opt/microchip/xc8/v3.00/pic/include/c99"
+      ],
+      "defines": ["__XC8", "__18F4550"],
+      "intelliSenseMode": "linux-gcc-x64",
+      "cStandard": "c99"
+    }
+  ],
+  "version": 4
+}

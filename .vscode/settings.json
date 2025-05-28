@@ -1,0 +1,15 @@
+{
+  "files.associations": {
+    "**/*.html": "html",
+    "**/templates/**/*.html": "django-html",
+    "**/templates/**/*": "django-txt",
+    "**/requirements{/**,*}.{txt,in}": "pip-requirements",
+    "**/manifest.webmanifest": "jsonc",
+    "**/serviceWorker.js": "javascript",
+    "**/firebase-messaging-sw.js": "javascript",
+    "user_app.h": "c",
+    "io.h": "c",
+    "scheduler.h": "c",
+    "kernel.h": "c"
+  },
+}
