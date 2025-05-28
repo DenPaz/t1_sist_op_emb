@@ -6036,12 +6036,12 @@ unsigned char _uDynamicHeap[0x50];
 
 typedef union _SALLOC
 {
- unsigned char byte;
- struct _BITS
- {
-  unsigned count : 7;
-  unsigned alloc : 1;
- } bits;
+    unsigned char byte;
+    struct _BITS
+    {
+        unsigned count : 7;
+        unsigned alloc : 1;
+    } bits;
 } SALLOC;
 
 unsigned char *SRAMalloc(unsigned char nBytes);

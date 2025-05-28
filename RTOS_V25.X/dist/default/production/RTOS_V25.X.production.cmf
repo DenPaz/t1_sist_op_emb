@@ -62,7 +62,7 @@ intcode CODE 0 8 8 4 1 2
 smallconst SMALLCONST 0 800 800 2 1 2
 bssBIGRAM BIGRAM 1 16D 16D 21B 1 1
 bssCOMRAM COMRAM 1 21 21 16 1 1
-$/tmp/xcXIGgigE/driver_tmp_9.o
+$/tmp/xcXioJpdN/driver_tmp_9.o
 stack STACK 2 388 388 478 1 1
 init CODE 0 C C 8 1 2
 reset_vec CODE 0 0 0 4 1 2
@@ -111,7 +111,7 @@ MEDIUMCONST 21EC-7FFF 1
 # All other numeric values are in decimal.
 %LINETAB
 $dist/default/production/RTOS_V25.X.production.o
-8 intcode CODE >9688:/tmp/xcXIGgigE/driver_tmp_1.s
+8 intcode CODE >9688:/tmp/xcXioJpdN/driver_tmp_1.s
 8 intcode CODE >8:/home/dennis/UFSC/sistemas_operacionais_embarcados/t1/RTOS_V25.X/timer.c
 1ABA text39 CODE >107:/home/dennis/UFSC/sistemas_operacionais_embarcados/t1/RTOS_V25.X/kernel.c
 1ABA text39 CODE >109:/home/dennis/UFSC/sistemas_operacionais_embarcados/t1/RTOS_V25.X/kernel.c
@@ -479,35 +479,35 @@ F7C text18 CODE >29:/home/dennis/UFSC/sistemas_operacionais_embarcados/t1/RTOS_V
 1DFE text0 CODE >13:/home/dennis/UFSC/sistemas_operacionais_embarcados/t1/RTOS_V25.X/main.c
 1E02 text0 CODE >15:/home/dennis/UFSC/sistemas_operacionais_embarcados/t1/RTOS_V25.X/main.c
 1E02 text0 CODE >16:/home/dennis/UFSC/sistemas_operacionais_embarcados/t1/RTOS_V25.X/main.c
-1FE2 cinit CODE >2979:/tmp/xcXIGgigE/driver_tmp_1.s
-1FE2 cinit CODE >2981:/tmp/xcXIGgigE/driver_tmp_1.s
-1FE2 cinit CODE >2984:/tmp/xcXIGgigE/driver_tmp_1.s
-1FE2 cinit CODE >3019:/tmp/xcXIGgigE/driver_tmp_1.s
-1FE6 cinit CODE >3020:/tmp/xcXIGgigE/driver_tmp_1.s
-1FEA cinit CODE >3021:/tmp/xcXIGgigE/driver_tmp_1.s
-1FEA cinit CODE >3022:/tmp/xcXIGgigE/driver_tmp_1.s
-1FEC cinit CODE >3023:/tmp/xcXIGgigE/driver_tmp_1.s
-1FEE cinit CODE >3024:/tmp/xcXIGgigE/driver_tmp_1.s
-1FF0 cinit CODE >3025:/tmp/xcXIGgigE/driver_tmp_1.s
-1FF2 cinit CODE >3026:/tmp/xcXIGgigE/driver_tmp_1.s
-1FF4 cinit CODE >3027:/tmp/xcXIGgigE/driver_tmp_1.s
-1FF6 cinit CODE >3030:/tmp/xcXIGgigE/driver_tmp_1.s
-1FFA cinit CODE >3031:/tmp/xcXIGgigE/driver_tmp_1.s
-1FFC cinit CODE >3032:/tmp/xcXIGgigE/driver_tmp_1.s
-1FFC cinit CODE >3033:/tmp/xcXIGgigE/driver_tmp_1.s
-1FFE cinit CODE >3034:/tmp/xcXIGgigE/driver_tmp_1.s
-2000 cinit CODE >3035:/tmp/xcXIGgigE/driver_tmp_1.s
-2002 cinit CODE >3038:/tmp/xcXIGgigE/driver_tmp_1.s
-2006 cinit CODE >3039:/tmp/xcXIGgigE/driver_tmp_1.s
-2008 cinit CODE >3040:/tmp/xcXIGgigE/driver_tmp_1.s
-2008 cinit CODE >3041:/tmp/xcXIGgigE/driver_tmp_1.s
-200A cinit CODE >3042:/tmp/xcXIGgigE/driver_tmp_1.s
-200C cinit CODE >3043:/tmp/xcXIGgigE/driver_tmp_1.s
-200E cinit CODE >3049:/tmp/xcXIGgigE/driver_tmp_1.s
-200E cinit CODE >3052:/tmp/xcXIGgigE/driver_tmp_1.s
-2010 cinit CODE >3053:/tmp/xcXIGgigE/driver_tmp_1.s
-2012 cinit CODE >3054:/tmp/xcXIGgigE/driver_tmp_1.s
-2014 cinit CODE >3055:/tmp/xcXIGgigE/driver_tmp_1.s
+1FE2 cinit CODE >2979:/tmp/xcXioJpdN/driver_tmp_1.s
+1FE2 cinit CODE >2981:/tmp/xcXioJpdN/driver_tmp_1.s
+1FE2 cinit CODE >2984:/tmp/xcXioJpdN/driver_tmp_1.s
+1FE2 cinit CODE >3019:/tmp/xcXioJpdN/driver_tmp_1.s
+1FE6 cinit CODE >3020:/tmp/xcXioJpdN/driver_tmp_1.s
+1FEA cinit CODE >3021:/tmp/xcXioJpdN/driver_tmp_1.s
+1FEA cinit CODE >3022:/tmp/xcXioJpdN/driver_tmp_1.s
+1FEC cinit CODE >3023:/tmp/xcXioJpdN/driver_tmp_1.s
+1FEE cinit CODE >3024:/tmp/xcXioJpdN/driver_tmp_1.s
+1FF0 cinit CODE >3025:/tmp/xcXioJpdN/driver_tmp_1.s
+1FF2 cinit CODE >3026:/tmp/xcXioJpdN/driver_tmp_1.s
+1FF4 cinit CODE >3027:/tmp/xcXioJpdN/driver_tmp_1.s
+1FF6 cinit CODE >3030:/tmp/xcXioJpdN/driver_tmp_1.s
+1FFA cinit CODE >3031:/tmp/xcXioJpdN/driver_tmp_1.s
+1FFC cinit CODE >3032:/tmp/xcXioJpdN/driver_tmp_1.s
+1FFC cinit CODE >3033:/tmp/xcXioJpdN/driver_tmp_1.s
+1FFE cinit CODE >3034:/tmp/xcXioJpdN/driver_tmp_1.s
+2000 cinit CODE >3035:/tmp/xcXioJpdN/driver_tmp_1.s
+2002 cinit CODE >3038:/tmp/xcXioJpdN/driver_tmp_1.s
+2006 cinit CODE >3039:/tmp/xcXioJpdN/driver_tmp_1.s
+2008 cinit CODE >3040:/tmp/xcXioJpdN/driver_tmp_1.s
+2008 cinit CODE >3041:/tmp/xcXioJpdN/driver_tmp_1.s
+200A cinit CODE >3042:/tmp/xcXioJpdN/driver_tmp_1.s
+200C cinit CODE >3043:/tmp/xcXioJpdN/driver_tmp_1.s
+200E cinit CODE >3049:/tmp/xcXioJpdN/driver_tmp_1.s
+200E cinit CODE >3052:/tmp/xcXioJpdN/driver_tmp_1.s
+2010 cinit CODE >3053:/tmp/xcXioJpdN/driver_tmp_1.s
+2012 cinit CODE >3054:/tmp/xcXioJpdN/driver_tmp_1.s
+2014 cinit CODE >3055:/tmp/xcXioJpdN/driver_tmp_1.s
 # %SYMTAB Section
 # An enumeration of all symbols in the program.
 # The beginning of the section is indicated by %SYMTAB.
@@ -544,14 +544,14 @@ __Lsmallconst 800 0 SMALLCONST 0 smallconst dist/default/production/RTOS_V25.X.p
 __end_of_change_state 160A 0 CODE 0 text34 dist/default/production/RTOS_V25.X.production.o
 _TMR0 FD6 0 ABS 0 - dist/default/production/RTOS_V25.X.production.o
 _WREG FE8 0 ABS 0 - dist/default/production/RTOS_V25.X.production.o
-___sp 388 0 STACK 2 stack /tmp/xcXIGgigE/driver_tmp_9.o
+___sp 388 0 STACK 2 stack /tmp/xcXioJpdN/driver_tmp_9.o
 _idle 207E 0 CODE 0 text35 dist/default/production/RTOS_V25.X.production.o
 _main 1DB2 0 CODE 0 text0 dist/default/production/RTOS_V25.X.production.o
 btemp 1 0 COMRAM 1 temp dist/default/production/RTOS_V25.X.production.o
-___stack_hi 5C4 0 STACK 2 stack /tmp/xcXIGgigE/driver_tmp_9.o
-___stack_lo 388 0 STACK 2 stack /tmp/xcXIGgigE/driver_tmp_9.o
+___stack_hi 5C4 0 STACK 2 stack /tmp/xcXioJpdN/driver_tmp_9.o
+___stack_lo 388 0 STACK 2 stack /tmp/xcXioJpdN/driver_tmp_9.o
 __HbssBIGRAM 0 0 ABS 0 bssBIGRAM dist/default/production/RTOS_V25.X.production.o
-start C 0 CODE 0 init /tmp/xcXIGgigE/driver_tmp_9.o
+start C 0 CODE 0 init /tmp/xcXioJpdN/driver_tmp_9.o
 __HbssCOMRAM 0 0 ABS 0 bssCOMRAM dist/default/production/RTOS_V25.X.production.o
 ?___lmul D5 0 BANK0 1 cstackBANK0 dist/default/production/RTOS_V25.X.production.o
 _os_start 21C4 0 CODE 0 text1 dist/default/production/RTOS_V25.X.production.o
@@ -570,11 +570,11 @@ ttemp6 5 0 COMRAM 1 temp dist/default/production/RTOS_V25.X.production.o
 ttemp7 9 0 COMRAM 1 temp dist/default/production/RTOS_V25.X.production.o
 __LbssBIGRAM 0 0 ABS 0 bssBIGRAM dist/default/production/RTOS_V25.X.production.o
 __end_of_SRAMInitHeap 1EB6 0 CODE 0 text15 dist/default/production/RTOS_V25.X.production.o
-__accesstop 60 0 ABS 0 - /tmp/xcXIGgigE/driver_tmp_9.o
-intlevel0 0 0 CODE 0 text /tmp/xcXIGgigE/driver_tmp_9.o
-intlevel1 0 0 CODE 0 text /tmp/xcXIGgigE/driver_tmp_9.o
-intlevel2 0 0 CODE 0 text /tmp/xcXIGgigE/driver_tmp_9.o
-intlevel3 0 0 CODE 0 text /tmp/xcXIGgigE/driver_tmp_9.o
+__accesstop 60 0 ABS 0 - /tmp/xcXioJpdN/driver_tmp_9.o
+intlevel0 0 0 CODE 0 text /tmp/xcXioJpdN/driver_tmp_9.o
+intlevel1 0 0 CODE 0 text /tmp/xcXioJpdN/driver_tmp_9.o
+intlevel2 0 0 CODE 0 text /tmp/xcXioJpdN/driver_tmp_9.o
+intlevel3 0 0 CODE 0 text /tmp/xcXioJpdN/driver_tmp_9.o
 __LbssCOMRAM 0 0 ABS 0 bssCOMRAM dist/default/production/RTOS_V25.X.production.o
 __LnvFARRAM 0 0 FARRAM 0 nvFARRAM dist/default/production/RTOS_V25.X.production.o
 _tarefa_estabilidade 204E 0 CODE 0 text33 dist/default/production/RTOS_V25.X.production.o
@@ -595,8 +595,8 @@ _ADCON1 FC1 0 ABS 0 - dist/default/production/RTOS_V25.X.production.o
 _ADCON2 FC0 0 ABS 0 - dist/default/production/RTOS_V25.X.production.o
 _ADRESH FC4 0 ABS 0 - dist/default/production/RTOS_V25.X.production.o
 _ADRESL FC3 0 ABS 0 - dist/default/production/RTOS_V25.X.production.o
-___inthi_sp 5C4 0 STACK 2 stack /tmp/xcXIGgigE/driver_tmp_9.o
-___intlo_sp 800 0 STACK 2 stack /tmp/xcXIGgigE/driver_tmp_9.o
+___inthi_sp 5C4 0 STACK 2 stack /tmp/xcXioJpdN/driver_tmp_9.o
+___intlo_sp 800 0 STACK 2 stack /tmp/xcXioJpdN/driver_tmp_9.o
 change_state@new_state 12B 0 BANK1 1 cstackBANK1 dist/default/production/RTOS_V25.X.production.o
 _CCPR1L FBE 0 ABS 0 - dist/default/production/RTOS_V25.X.production.o
 _CCPR2L FBB 0 ABS 0 - dist/default/production/RTOS_V25.X.production.o
@@ -641,7 +641,7 @@ _STKPTR FFC 0 ABS 0 - dist/default/production/RTOS_V25.X.production.o
 __end_of_pwm_init 21B0 0 CODE 0 text3 dist/default/production/RTOS_V25.X.production.o
 __end_of_SRAMalloc 17E8 0 CODE 0 text8 dist/default/production/RTOS_V25.X.production.o
 read_pipe@data D1 0 BANK0 1 cstackBANK0 dist/default/production/RTOS_V25.X.production.o
-isa$xinst 0 0 ABS 0 - /tmp/xcXIGgigE/driver_tmp_9.o
+isa$xinst 0 0 ABS 0 - /tmp/xcXioJpdN/driver_tmp_9.o
 __Hbank0 0 0 ABS 0 bank0 dist/default/production/RTOS_V25.X.production.o
 __Hbank1 0 0 ABS 0 bank1 dist/default/production/RTOS_V25.X.production.o
 __Hbank2 0 0 ABS 0 bank2 dist/default/production/RTOS_V25.X.production.o
@@ -849,15 +849,15 @@ _LATDbits F8C 0 ABS 0 - dist/default/production/RTOS_V25.X.production.o
 __Lsivt_hi 0 0 CODE 0 sivt_hi dist/default/production/RTOS_V25.X.production.o
 __Lsivt_lo 18 0 CODE 0 sivt_lo dist/default/production/RTOS_V25.X.production.o
 __Lfarbss 0 0 FARRAM 0 farbss dist/default/production/RTOS_V25.X.production.o
-___inthi_stack_hi 800 0 STACK 2 stack /tmp/xcXIGgigE/driver_tmp_9.o
-___inthi_stack_lo 5C4 0 STACK 2 stack /tmp/xcXIGgigE/driver_tmp_9.o
+___inthi_stack_hi 800 0 STACK 2 stack /tmp/xcXioJpdN/driver_tmp_9.o
+___inthi_stack_lo 5C4 0 STACK 2 stack /tmp/xcXioJpdN/driver_tmp_9.o
 __Lfardata 0 0 FARRAM 0 fardata dist/default/production/RTOS_V25.X.production.o
-isa$std 1 0 ABS 0 - /tmp/xcXIGgigE/driver_tmp_9.o
+isa$std 1 0 ABS 0 - /tmp/xcXioJpdN/driver_tmp_9.o
 __end_of_tarefa_acelerador 1FA2 0 CODE 0 text16 dist/default/production/RTOS_V25.X.production.o
 create_pipe@p 45 0 COMRAM 1 cstackCOMRAM dist/default/production/RTOS_V25.X.production.o
 __end_of_priority_scheduler 1964 0 CODE 0 text23 dist/default/production/RTOS_V25.X.production.o
-stackhi 7FF 0 ABS 0 - /tmp/xcXIGgigE/driver_tmp_9.o
-stacklo 388 0 ABS 0 - /tmp/xcXIGgigE/driver_tmp_9.o
+stackhi 7FF 0 ABS 0 - /tmp/xcXioJpdN/driver_tmp_9.o
+stacklo 388 0 ABS 0 - /tmp/xcXioJpdN/driver_tmp_9.o
 __Lintcode 8 0 CODE 0 intcode dist/default/production/RTOS_V25.X.production.o
 __Lintret 0 0 ABS 0 intret dist/default/production/RTOS_V25.X.production.o
 __Lirdata 0 0 CODE 0 irdata dist/default/production/RTOS_V25.X.production.o
@@ -948,15 +948,15 @@ __Ltext35 0 0 ABS 0 text35 dist/default/production/RTOS_V25.X.production.o
 __Ltext37 0 0 ABS 0 text37 dist/default/production/RTOS_V25.X.production.o
 __Ltext38 0 0 ABS 0 text38 dist/default/production/RTOS_V25.X.production.o
 __Ltext39 0 0 ABS 0 text39 dist/default/production/RTOS_V25.X.production.o
-__ramtop 800 0 RAM 0 ramtop /tmp/xcXIGgigE/driver_tmp_9.o
+__ramtop 800 0 RAM 0 ramtop /tmp/xcXioJpdN/driver_tmp_9.o
 create_task@task 38 0 COMRAM 1 cstackCOMRAM dist/default/production/RTOS_V25.X.production.o
 __Lpowerup 0 0 CODE 0 powerup dist/default/production/RTOS_V25.X.production.o
 __Leeprom_data 0 0 EEDATA 0 eeprom_data dist/default/production/RTOS_V25.X.production.o
 __H__absolute__ 0 0 ABS 0 __absolute__ dist/default/production/RTOS_V25.X.production.o
 __psmallconst 800 0 SMALLCONST 0 smallconst dist/default/production/RTOS_V25.X.production.o
 __Lreset_vec 0 0 CODE 0 reset_vec dist/default/production/RTOS_V25.X.production.o
-___heap_hi 0 0 ABS 0 - /tmp/xcXIGgigE/driver_tmp_9.o
-___heap_lo 0 0 ABS 0 - /tmp/xcXIGgigE/driver_tmp_9.o
+___heap_hi 0 0 ABS 0 - /tmp/xcXioJpdN/driver_tmp_9.o
+___heap_lo 0 0 ABS 0 - /tmp/xcXioJpdN/driver_tmp_9.o
 __SRAMmerge@uSum 39 0 COMRAM 1 cstackCOMRAM dist/default/production/RTOS_V25.X.production.o
 ___param_bank 0 0 ABS 0 - dist/default/production/RTOS_V25.X.production.o
 __Hbigdata 0 0 BIGRAM 1 bigdata dist/default/production/RTOS_V25.X.production.o

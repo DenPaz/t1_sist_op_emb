@@ -1,7 +1,7 @@
 
 
 Microchip MPLAB XC8 Assembler V3.00 build 20241204225717 
-                                                                                               Wed May 28 15:02:29 2025
+                                                                                               Wed May 28 15:21:01 2025
 
 Microchip MPLAB XC8 C Compiler v3.00 (Free license) build 20241204225717 Og1 
      1                           	processor	18F4550
@@ -2530,8 +2530,8 @@ Microchip MPLAB XC8 C Compiler v3.00 (Free license) build 20241204225717 Og1
   2513   001712  6E43               	movwf	SRAMalloc@nBytes^0,c
   2514   001714                     
   2515                           ;mem.c: 138: unsigned char * SRAMalloc( unsigned char nBytes);mem.c: 139: {;mem.c: 140: 
-      +                           SALLOC * pHeap;;mem.c: 141:  SALLOC * temp;;mem.c: 142:       SALLOC segHeader;;mem.c: 
-      +                          143:       unsigned char segLen;;mem.c: 146:  if (nBytes > (0x7F - 1))
+      +                              SALLOC * pHeap;;mem.c: 141:     SALLOC * temp;;mem.c: 142:          SALLOC segHeader
+      +                          ;;mem.c: 143:          unsigned char segLen;;mem.c: 146:     if (nBytes > (0x7F - 1))
   2516   001714  0E7E               	movlw	126
   2517   001716  6443               	cpfsgt	SRAMalloc@nBytes^0,c
   2518   001718  EF90  F00B         	goto	u771
@@ -2541,31 +2541,31 @@ Microchip MPLAB XC8 C Compiler v3.00 (Free license) build 20241204225717 Og1
   2522   001724                     u770:
   2523   001724                     l1855:
   2524                           
-  2525                           ;mem.c: 147:   return (0);
+  2525                           ;mem.c: 147:         return (0);
   2526   001724  0E00               	movlw	0
   2527   001726  EFF3  F00B         	goto	l138
   2528   00172A                     l1859:
   2529                           
-  2530                           ;mem.c: 150:  pHeap = (SALLOC *)_uDynamicHeap;
+  2530                           ;mem.c: 150:     pHeap = (SALLOC *)_uDynamicHeap;
   2531   00172A  0E61               	movlw	low __uDynamicHeap
   2532   00172C  6E44               	movwf	SRAMalloc@pHeap^0,c
   2533   00172E                     l1861:
   2534                           
-  2535                           ;mem.c: 153:  {;mem.c: 155:   segHeader = *pHeap;
+  2535                           ;mem.c: 153:     {;mem.c: 155:         segHeader = *pHeap;
   2536   00172E  5044               	movf	SRAMalloc@pHeap^0,w,c
   2537   001730  6ED9               	movwf	fsr2l,c
   2538   001732  6ADA               	clrf	fsr2h,c
   2539   001734  50DF               	movf	indf2,w,c
   2540   001736  6E42               	movwf	SRAMalloc@segHeader^0,c
   2541   001738                     
-  2542                           ;mem.c: 158:   segLen = segHeader.bits.count - 1;
+  2542                           ;mem.c: 158:         segLen = segHeader.bits.count - 1;
   2543   001738  5042               	movf	SRAMalloc@segHeader^0,w,c
   2544   00173A  0B7F               	andlw	127
   2545   00173C  6E3F               	movwf	??_SRAMalloc^0,c
   2546   00173E  043F               	decf	??_SRAMalloc^0,w,c
   2547   001740  6E41               	movwf	SRAMalloc@segLen^0,c
   2548   001742                     
-  2549                           ;mem.c: 161:   if (segHeader.byte == 0)
+  2549                           ;mem.c: 161:         if (segHeader.byte == 0)
   2550   001742  5042               	movf	SRAMalloc@segHeader^0,w,c
   2551   001744  A4D8               	btfss	status,2,c
   2552   001746  EFA7  F00B         	goto	u781
@@ -2576,7 +2576,7 @@ Microchip MPLAB XC8 C Compiler v3.00 (Free license) build 20241204225717 Og1
   2557   001752  EF92  F00B         	goto	l1855
   2558   001756                     l140:
   2559                           
-  2560                           ;mem.c: 165:   if (!(segHeader.bits.alloc))
+  2560                           ;mem.c: 165:         if (!(segHeader.bits.alloc))
   2561   001756  BE42               	btfsc	SRAMalloc@segHeader^0,7,c
   2562   001758  EFB0  F00B         	goto	u791
   2563   00175C  EFB2  F00B         	goto	u790
@@ -2584,7 +2584,7 @@ Microchip MPLAB XC8 C Compiler v3.00 (Free license) build 20241204225717 Og1
   2565   001760  EFC7  F00B         	goto	l1875
   2566   001764                     u790:
   2567   001764                     
-  2568                           ;mem.c: 166:   {;mem.c: 168:    if (nBytes > segLen)
+  2568                           ;mem.c: 166:         {;mem.c: 168:             if (nBytes > segLen)
   2569   001764  5043               	movf	SRAMalloc@nBytes^0,w,c
   2570   001766  5C41               	subwf	SRAMalloc@segLen^0,w,c
   2571   001768  B0D8               	btfsc	status,0,c
@@ -2594,7 +2594,7 @@ Microchip MPLAB XC8 C Compiler v3.00 (Free license) build 20241204225717 Og1
   2575   001772  EFCE  F00B         	goto	l1877
   2576   001776                     u800:
   2577   001776                     
-  2578                           ;mem.c: 169:    {;mem.c: 171:     if (!(_SRAMmerge(pHeap)))
+  2578                           ;mem.c: 169:             {;mem.c: 171:                 if (!(_SRAMmerge(pHeap)))
   2579   001776  C044  F037         	movff	SRAMalloc@pHeap,__SRAMmerge@pSegA
   2580   00177A  ECF4  F00B         	call	__SRAMmerge	;wreg free
   2581   00177E  0900               	iorlw	0
@@ -2606,7 +2606,7 @@ Microchip MPLAB XC8 C Compiler v3.00 (Free license) build 20241204225717 Og1
   2587   00178E                     u810:
   2588   00178E                     l1875:
   2589                           
-  2590                           ;mem.c: 172:      pHeap += segHeader.bits.count;
+  2590                           ;mem.c: 172:                     pHeap += segHeader.bits.count;
   2591   00178E  5042               	movf	SRAMalloc@segHeader^0,w,c
   2592   001790  0B7F               	andlw	127
   2593   001792  0D01               	mullw	1
@@ -2615,7 +2615,7 @@ Microchip MPLAB XC8 C Compiler v3.00 (Free license) build 20241204225717 Og1
   2596   001798  EF97  F00B         	goto	l1861
   2597   00179C                     l1877:
   2598                           
-  2599                           ;mem.c: 178:     if (nBytes == segLen)
+  2599                           ;mem.c: 178:                 if (nBytes == segLen)
   2600   00179C  5041               	movf	SRAMalloc@segLen^0,w,c
   2601   00179E  1843               	xorwf	SRAMalloc@nBytes^0,w,c
   2602   0017A0  A4D8               	btfss	status,2,c
@@ -2625,18 +2625,19 @@ Microchip MPLAB XC8 C Compiler v3.00 (Free license) build 20241204225717 Og1
   2606   0017AA  EFDE  F00B         	goto	l1887
   2607   0017AE                     u820:
   2608   0017AE                     
-  2609                           ;mem.c: 179:     {;mem.c: 181:      (*pHeap).bits.alloc = 1;
+  2609                           ;mem.c: 179:                 {;mem.c: 181:                     (*pHeap).bits.alloc = 1;
   2610   0017AE  5044               	movf	SRAMalloc@pHeap^0,w,c
   2611   0017B0  6ED9               	movwf	fsr2l,c
   2612   0017B2  6ADA               	clrf	fsr2h,c
   2613   0017B4  8EDF               	bsf	indf2,7,c
   2614   0017B6                     
-  2615                           ;mem.c: 184:      return ((unsigned char *)(pHeap + 1));
+  2615                           ;mem.c: 184:                     return ((unsigned char *)(pHeap + 1));
   2616   0017B6  2844               	incf	SRAMalloc@pHeap^0,w,c
   2617   0017B8  EFF3  F00B         	goto	l138
   2618   0017BC                     l1887:
   2619                           
-  2620                           ;mem.c: 189:     {;mem.c: 191:      (*pHeap).byte = nBytes + 0x81;
+  2620                           ;mem.c: 189:                 {;mem.c: 191:                     (*pHeap).byte = nBytes + 
+      +                          0x81;
   2621   0017BC  5044               	movf	SRAMalloc@pHeap^0,w,c
   2622   0017BE  6ED9               	movwf	fsr2l,c
   2623   0017C0  6ADA               	clrf	fsr2h,c
@@ -2644,15 +2645,15 @@ Microchip MPLAB XC8 C Compiler v3.00 (Free license) build 20241204225717 Og1
   2625   0017C4  0F81               	addlw	129
   2626   0017C6  6EDF               	movwf	indf2,c
   2627   0017C8                     
-  2628                           ;mem.c: 194:      temp = pHeap + 1;
+  2628                           ;mem.c: 194:                     temp = pHeap + 1;
   2629   0017C8  2844               	incf	SRAMalloc@pHeap^0,w,c
   2630   0017CA  6E40               	movwf	SRAMalloc@temp^0,c
   2631   0017CC                     
-  2632                           ;mem.c: 197:      pHeap += (nBytes + 1);
+  2632                           ;mem.c: 197:                     pHeap += (nBytes + 1);
   2633   0017CC  2843               	incf	SRAMalloc@nBytes^0,w,c
   2634   0017CE  2644               	addwf	SRAMalloc@pHeap^0,f,c
   2635                           
-  2636                           ;mem.c: 200:      (*pHeap).byte = segLen - nBytes;
+  2636                           ;mem.c: 200:                     (*pHeap).byte = segLen - nBytes;
   2637   0017D0  5044               	movf	SRAMalloc@pHeap^0,w,c
   2638   0017D2  6ED9               	movwf	fsr2l,c
   2639   0017D4  6ADA               	clrf	fsr2h,c
@@ -2660,7 +2661,7 @@ Microchip MPLAB XC8 C Compiler v3.00 (Free license) build 20241204225717 Og1
   2641   0017D8  5C41               	subwf	SRAMalloc@segLen^0,w,c
   2642   0017DA  6EDF               	movwf	indf2,c
   2643   0017DC                     
-  2644                           ;mem.c: 203:      return ((unsigned char *)temp);
+  2644                           ;mem.c: 203:                     return ((unsigned char *)temp);
   2645   0017DC  5040               	movf	SRAMalloc@temp^0,w,c
   2646   0017DE  EFF3  F00B         	goto	l138
   2647   0017E2                     l147:
@@ -2711,9 +2712,9 @@ Microchip MPLAB XC8 C Compiler v3.00 (Free license) build 20241204225717 Og1
   2692   0017E8                     __SRAMmerge:
   2693                           	callstack 18
   2694   0017E8                     
-  2695                           ;mem.c: 302:      unsigned char _SRAMmerge(SALLOC * pSegA);mem.c: 303: {;mem.c: 304:  SA
-      +                          LLOC * pSegB;;mem.c: 305:       SALLOC uSegA, uSegB, uSum;;mem.c: 308:  pSegB = pSegA + 
-      +                          (*pSegA).byte;
+  2695                           ;mem.c: 302:      unsigned char _SRAMmerge(SALLOC * pSegA);mem.c: 303: {;mem.c: 304:    
+      +                           SALLOC * pSegB;;mem.c: 305:          SALLOC uSegA, uSegB, uSum;;mem.c: 308:     pSegB =
+      +                           pSegA + (*pSegA).byte;
   2696   0017E8  5037               	movf	__SRAMmerge@pSegA^0,w,c
   2697   0017EA  6ED9               	movwf	fsr2l,c
   2698   0017EC  6ADA               	clrf	fsr2h,c
@@ -2723,21 +2724,21 @@ Microchip MPLAB XC8 C Compiler v3.00 (Free license) build 20241204225717 Og1
   2702   0017F4  2438               	addwf	??__SRAMmerge^0,w,c
   2703   0017F6  6E3A               	movwf	__SRAMmerge@pSegB^0,c
   2704   0017F8                     
-  2705                           ;mem.c: 311:  uSegA = *pSegA;
+  2705                           ;mem.c: 311:     uSegA = *pSegA;
   2706   0017F8  5037               	movf	__SRAMmerge@pSegA^0,w,c
   2707   0017FA  6ED9               	movwf	fsr2l,c
   2708   0017FC  6ADA               	clrf	fsr2h,c
   2709   0017FE  50DF               	movf	indf2,w,c
   2710   001800  6E3B               	movwf	__SRAMmerge@uSegA^0,c
   2711   001802                     
-  2712                           ;mem.c: 312:  uSegB = *pSegB;
+  2712                           ;mem.c: 312:     uSegB = *pSegB;
   2713   001802  503A               	movf	__SRAMmerge@pSegB^0,w,c
   2714   001804  6ED9               	movwf	fsr2l,c
   2715   001806  6ADA               	clrf	fsr2h,c
   2716   001808  50DF               	movf	indf2,w,c
   2717   00180A  6E3C               	movwf	__SRAMmerge@uSegB^0,c
   2718   00180C                     
-  2719                           ;mem.c: 315:  if (uSegB.byte == 0)
+  2719                           ;mem.c: 315:     if (uSegB.byte == 0)
   2720   00180C  503C               	movf	__SRAMmerge@uSegB^0,w,c
   2721   00180E  A4D8               	btfss	status,2,c
   2722   001810  EF0C  F00C         	goto	u721
@@ -2747,12 +2748,12 @@ Microchip MPLAB XC8 C Compiler v3.00 (Free license) build 20241204225717 Og1
   2726   00181C                     u720:
   2727   00181C                     l1811:
   2728                           
-  2729                           ;mem.c: 316:   return (0);
+  2729                           ;mem.c: 316:         return (0);
   2730   00181C  0E00               	movlw	0
   2731   00181E  EF52  F00C         	goto	l164
   2732   001822                     l163:
   2733                           
-  2734                           ;mem.c: 319:  if (uSegA.bits.alloc || uSegB.bits.alloc)
+  2734                           ;mem.c: 319:     if (uSegA.bits.alloc || uSegB.bits.alloc)
   2735   001822  BE3B               	btfsc	__SRAMmerge@uSegA^0,7,c
   2736   001824  EF16  F00C         	goto	u731
   2737   001828  EF18  F00C         	goto	u730
@@ -2768,7 +2769,7 @@ Microchip MPLAB XC8 C Compiler v3.00 (Free license) build 20241204225717 Og1
   2747   00183E  EF0E  F00C         	goto	l1811
   2748   001842                     l1821:
   2749                           
-  2750                           ;mem.c: 323:  if (uSegA.bits.count == 0x7F)
+  2750                           ;mem.c: 323:     if (uSegA.bits.count == 0x7F)
   2751   001842  503B               	movf	__SRAMmerge@uSegA^0,w,c
   2752   001844  0B7F               	andlw	127
   2753   001846  0A7F               	xorlw	127
@@ -2781,12 +2782,12 @@ Microchip MPLAB XC8 C Compiler v3.00 (Free license) build 20241204225717 Og1
   2760   001856  EF0E  F00C         	goto	l1811
   2761   00185A                     l1827:
   2762                           
-  2763                           ;mem.c: 327:  uSum.byte = uSegA.byte + uSegB.byte;
+  2763                           ;mem.c: 327:     uSum.byte = uSegA.byte + uSegB.byte;
   2764   00185A  503B               	movf	__SRAMmerge@uSegA^0,w,c
   2765   00185C  243C               	addwf	__SRAMmerge@uSegB^0,w,c
   2766   00185E  6E39               	movwf	__SRAMmerge@uSum^0,c
   2767                           
-  2768                           ;mem.c: 332:  if ((uSum.byte) > 0x7F)
+  2768                           ;mem.c: 332:     if ((uSum.byte) > 0x7F)
   2769   001860  0E7F               	movlw	127
   2770   001862  6439               	cpfsgt	__SRAMmerge@uSum^0,c
   2771   001864  EF36  F00C         	goto	u761
@@ -2795,24 +2796,24 @@ Microchip MPLAB XC8 C Compiler v3.00 (Free license) build 20241204225717 Og1
   2774   00186C  EF4C  F00C         	goto	l1843
   2775   001870                     u760:
   2776   001870                     
-  2777                           ;mem.c: 333:  {;mem.c: 334:   (*pSegA).byte = 0x7F;
+  2777                           ;mem.c: 333:     {;mem.c: 334:         (*pSegA).byte = 0x7F;
   2778   001870  5037               	movf	__SRAMmerge@pSegA^0,w,c
   2779   001872  6ED9               	movwf	fsr2l,c
   2780   001874  6ADA               	clrf	fsr2h,c
   2781   001876  0E7F               	movlw	127
   2782   001878  6EDF               	movwf	indf2,c
   2783   00187A                     
-  2784                           ;mem.c: 335:   pSegA += 0x7F;
+  2784                           ;mem.c: 335:         pSegA += 0x7F;
   2785   00187A  0E7F               	movlw	127
   2786   00187C  2637               	addwf	__SRAMmerge@pSegA^0,f,c
   2787   00187E                     
-  2788                           ;mem.c: 336:   pSegB += uSegB.byte;
+  2788                           ;mem.c: 336:         pSegB += uSegB.byte;
   2789   00187E  503C               	movf	__SRAMmerge@uSegB^0,w,c
   2790   001880  0D01               	mullw	1
   2791   001882  50F3               	movf	243,w,c
   2792   001884  263A               	addwf	__SRAMmerge@pSegB^0,f,c
   2793   001886                     
-  2794                           ;mem.c: 337:   (*pSegA).byte = (unsigned char)(pSegB - pSegA);
+  2794                           ;mem.c: 337:         (*pSegA).byte = (unsigned char)(pSegB - pSegA);
   2795   001886  5037               	movf	__SRAMmerge@pSegA^0,w,c
   2796   001888  6ED9               	movwf	fsr2l,c
   2797   00188A  6ADA               	clrf	fsr2h,c
@@ -2820,12 +2821,12 @@ Microchip MPLAB XC8 C Compiler v3.00 (Free license) build 20241204225717 Og1
   2799   00188E  5C3A               	subwf	__SRAMmerge@pSegB^0,w,c
   2800   001890  6EDF               	movwf	indf2,c
   2801   001892                     
-  2802                           ;mem.c: 339:   return (0x7F);
+  2802                           ;mem.c: 339:         return (0x7F);
   2803   001892  0E7F               	movlw	127
   2804   001894  EF52  F00C         	goto	l164
   2805   001898                     l1843:
   2806                           
-  2807                           ;mem.c: 344:  {;mem.c: 345:   return ((*pSegA).byte = uSum.byte);
+  2807                           ;mem.c: 344:     {;mem.c: 345:         return ((*pSegA).byte = uSum.byte);
   2808   001898  5037               	movf	__SRAMmerge@pSegA^0,w,c
   2809   00189A  6ED9               	movwf	fsr2l,c
   2810   00189C  6ADA               	clrf	fsr2h,c
@@ -3211,19 +3212,19 @@ Microchip MPLAB XC8 C Compiler v3.00 (Free license) build 20241204225717 Og1
   3189   001E60                     _SRAMInitHeap:
   3190                           	callstack 21
   3191   001E60                     
-  3192                           ;mem.c: 261:  unsigned char * pHeap;;mem.c: 262:       unsigned int count;;mem.c: 264:  
-      +                          pHeap = _uDynamicHeap;
+  3192                           ;mem.c: 261:     unsigned char * pHeap;;mem.c: 262:          unsigned int count;;mem.c: 
+      +                          264:     pHeap = _uDynamicHeap;
   3193   001E60  0E61               	movlw	low __uDynamicHeap
   3194   001E62  6E37               	movwf	SRAMInitHeap@pHeap^0,c
   3195   001E64                     
-  3196                           ;mem.c: 265:  count = 0x50 - 1;
+  3196                           ;mem.c: 265:     count = 0x50 - 1;
   3197   001E64  0E00               	movlw	0
   3198   001E66  6E39               	movwf	(SRAMInitHeap@count+1)^0,c
   3199   001E68  0E4F               	movlw	79
   3200   001E6A  6E38               	movwf	SRAMInitHeap@count^0,c
   3201   001E6C                     l2029:
   3202                           
-  3203                           ;mem.c: 268:  {;mem.c: 269:   if (count > 0x7F)
+  3203                           ;mem.c: 268:     {;mem.c: 269:         if (count > 0x7F)
   3204   001E6C  5039               	movf	(SRAMInitHeap@count+1)^0,w,c
   3205   001E6E  E109               	bnz	u940
   3206   001E70  0E80               	movlw	128
@@ -3235,18 +3236,18 @@ Microchip MPLAB XC8 C Compiler v3.00 (Free license) build 20241204225717 Og1
   3212   001E7E  EF50  F00F         	goto	l2037
   3213   001E82                     u940:
   3214   001E82                     
-  3215                           ;mem.c: 270:   {;mem.c: 271:    *pHeap = 0x7F;
+  3215                           ;mem.c: 270:         {;mem.c: 271:             *pHeap = 0x7F;
   3216   001E82  5037               	movf	SRAMInitHeap@pHeap^0,w,c
   3217   001E84  6ED9               	movwf	fsr2l,c
   3218   001E86  6ADA               	clrf	fsr2h,c
   3219   001E88  0E7F               	movlw	127
   3220   001E8A  6EDF               	movwf	indf2,c
   3221   001E8C                     
-  3222                           ;mem.c: 272:    pHeap += 0x7F;
+  3222                           ;mem.c: 272:             pHeap += 0x7F;
   3223   001E8C  0E7F               	movlw	127
   3224   001E8E  2637               	addwf	SRAMInitHeap@pHeap^0,f,c
   3225   001E90                     
-  3226                           ;mem.c: 273:    count = count - 0x7F;
+  3226                           ;mem.c: 273:             count = count - 0x7F;
   3227   001E90  0E81               	movlw	129
   3228   001E92  2438               	addwf	SRAMInitHeap@count^0,w,c
   3229   001E94  6E38               	movwf	SRAMInitHeap@count^0,c
@@ -3254,17 +3255,17 @@ Microchip MPLAB XC8 C Compiler v3.00 (Free license) build 20241204225717 Og1
   3231   001E98  2039               	addwfc	(SRAMInitHeap@count+1)^0,w,c
   3232   001E9A  6E39               	movwf	(SRAMInitHeap@count+1)^0,c
   3233                           
-  3234                           ;mem.c: 274:   }
+  3234                           ;mem.c: 274:         }
   3235   001E9C  EF36  F00F         	goto	l2029
   3236   001EA0                     l2037:
   3237                           
-  3238                           ;mem.c: 276:   {;mem.c: 277:    *pHeap = (unsigned char)count;
+  3238                           ;mem.c: 276:         {;mem.c: 277:             *pHeap = (unsigned char)count;
   3239   001EA0  5037               	movf	SRAMInitHeap@pHeap^0,w,c
   3240   001EA2  6ED9               	movwf	fsr2l,c
   3241   001EA4  6ADA               	clrf	fsr2h,c
   3242   001EA6  C038  FFDF         	movff	SRAMInitHeap@count,indf2
   3243   001EAA                     
-  3244                           ;mem.c: 278:    *(pHeap + count) = 0;
+  3244                           ;mem.c: 278:             *(pHeap + count) = 0;
   3245   001EAA  5037               	movf	SRAMInitHeap@pHeap^0,w,c
   3246   001EAC  2438               	addwf	SRAMInitHeap@count^0,w,c
   3247   001EAE  6ED9               	movwf	fsr2l,c
@@ -7909,7 +7910,7 @@ DATA                 0      0     870      0.0%
 
 
 Microchip Technology PIC18 Macro Assembler V3.00 build 20241204225717 
-Symbol Table                                                                                   Wed May 28 15:02:29 2025
+Symbol Table                                                                                   Wed May 28 15:21:01 2025
 
                                l20 1E02                                 l43 195C  
                                l19 1E02                                 l29 21E0  
