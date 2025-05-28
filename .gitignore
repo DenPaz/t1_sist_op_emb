@@ -84,6 +84,6 @@ dkms.conf
 *.out
 *.app
 
-build/*
-debug/*
-dist/*
+build/
+debug/
+dist/
