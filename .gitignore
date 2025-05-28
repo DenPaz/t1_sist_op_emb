@@ -1,89 +1,49 @@
-# Prerequisites
-*.d
+# MPLAB X IDE
+nbproject/Makefile-*
+nbproject/private/
+nbproject/Package-*
+nbproject/configurations.xml
+dist/
+build/
+*.X/nbproject/private/
+*.X/dist/
+*.X/build/
+*.X/Makefile
+*.X/Makefile-*
 
-# Object files
+# MPLAB Harmony (if applicable)
+firmware/src/system_config/
+firmware/src/system_init.c
+firmware/src/system_tasks.c
+
+# Compiled object files and binaries
 *.o
-*.ko
 *.obj
 *.elf
-
-# Linker output
-*.ilk
-*.map
-*.exp
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
-
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
 *.hex
-
-# Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
-
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
-
-# Prerequisites
+*.cof
+*.map
+*.sdb
+*.sym
+*.lst
+*.p1
+*.p2
 *.d
+*.dsm
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+# IDE backup and temp files
+*~
+*.bak
+*.tmp
+*.log
 
-# Precompiled Headers
-*.gch
-*.pch
+# MPLAB Harmony Framework (optional, if using as a submodule)
+#framework/
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+# VS Code or other external editor settings
+.vscode/
+*.code-workspace
 
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
-
-build/
-debug/
-dist/
+# OS-specific files
+.DS_Store
+Thumbs.db
