@@ -5972,6 +5972,9 @@ typedef struct ready_queue
 
 extern ready_queue_t r_queue;
 
+
+static uint8_t last_run_idx[4 +1];
+
 void __attribute__((reentrant)) scheduler()
 {
 
@@ -5999,18 +6002,25 @@ void __attribute__((reentrant)) rr_scheduler()
 
 void __attribute__((reentrant)) priority_scheduler()
 {
+     uint8_t highest = 0xFF;
 
-    uint8_t best_priority = 0xFF;
-    int selected = -1;
-    for (uint8_t i = 0; i < r_queue.ready_queue_size; i++) {
-        tcb_t *t = &r_queue.ready_queue[i];
-        if (t->task_state == READY) {
-            if ((uint8_t)t->task_priority < best_priority) {
-                best_priority = t->task_priority;
-                selected = i;
-            }
+    for (uint8_t i = 1; i < r_queue.ready_queue_size; i++) {
+        if (r_queue.ready_queue[i].task_state == READY &&
+            r_queue.ready_queue[i].task_priority < highest) {
+            highest = r_queue.ready_queue[i].task_priority;
         }
     }
 
-    r_queue.task_running = (selected >= 0) ? selected : 0;
+    uint8_t start = (last_run_idx[highest] + 1) % r_queue.ready_queue_size;
+    for (uint8_t offset = 0; offset < r_queue.ready_queue_size; offset++) {
+        uint8_t idx = (start + offset) % r_queue.ready_queue_size;
+        tcb_t *t = &r_queue.ready_queue[idx];
+        if (t->task_state == READY && t->task_priority == highest) {
+            r_queue.task_running = idx;
+            last_run_idx[highest] = idx;
+            return;
+        }
+    }
+
+    r_queue.task_running = 0;
 }

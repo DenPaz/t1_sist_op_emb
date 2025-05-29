@@ -6099,6 +6099,7 @@ TASK tarefa_acelerador()
         uint8_t data = raw >> 2;
         write_pipe(&accel_pipe, data);
         LATDbits.LATD1 = 0;
+        yield();
     }
 }
 
@@ -6115,6 +6116,7 @@ TASK tarefa_controle_central()
         accel_data = duty;
         mutex_unlock(&buffer_mutex);
         LATDbits.LATD2 = 0;
+        yield();
     }
 }
 
@@ -6138,6 +6140,7 @@ TASK tarefa_injecao_eletronica()
 
         yield();
         LATDbits.LATD0 = 0;
+        yield();
     }
 }
 
