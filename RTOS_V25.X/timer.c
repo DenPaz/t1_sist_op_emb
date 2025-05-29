@@ -2,6 +2,7 @@
 #include "timer.h"
 #include "kernel.h"
 #include "scheduler.h"
+#include "user_app.h"
 
 void config_timer0()
 {
@@ -30,6 +31,13 @@ void start_timer0()
 void __interrupt() ISR_TMR0()
 {
     di();
+
+    // Se houve interrupção externa INT0, limpa flag e cria tarefa one-shot
+    if (INTCONbits.INT0IF)
+    {
+        INTCONbits.INT0IF = 0;
+        create_task(ID_EST, PRIO_EST, tarefa_estabilidade);
+    }
 
     // Seta o flag do timer em zero
     INTCONbits.TMR0IF = 0;

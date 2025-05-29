@@ -3,9 +3,10 @@
 
 #include "types.h"
 
-TASK tarefa_1(void);
-TASK tarefa_2(void);
-TASK tarefa_3(void);
+TASK tarefa_acelerador(void);
+TASK tarefa_controle(void);
+TASK tarefa_injecao(void);
+TASK tarefa_estabilidade(void);
 
 void user_config(void);
 
