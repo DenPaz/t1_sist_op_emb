@@ -3,8 +3,8 @@
 
 void create_pipe(pipe_t *p, uint8_t size)
 {
-    p->pipe_size = size;
     p->pipe_msg = (uint8_t *)SRAMalloc(size);
+    p->pipe_size = size;
     p->pipe_pos_read = 0;
     p->pipe_pos_write = 0;
     sem_init(&p->pipe_sem_read, 0);
