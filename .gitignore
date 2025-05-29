@@ -30,6 +30,7 @@ firmware/src/system_tasks.c
 *.p2
 *.d
 *.dsm
+*.properties
 
 # IDE backup and temp files
 *~
