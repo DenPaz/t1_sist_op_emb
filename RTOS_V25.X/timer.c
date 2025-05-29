@@ -33,19 +33,16 @@ void __interrupt() ISR_TMR0()
 
     // Seta o flag do timer em zero
     INTCONbits.TMR0IF = 0;
-    // Valor inicial do timer
+    // Zera o contador
     TMR0 = 0;
 
-    // Decrementa o delay das tarefas que estão em estado
-    // de waiting
+    // Decrementa o delay das tarefas que estão em estado WAITING
     decrease_time();
 
-    // Salva o contexto da tarefa que está em execução
+    // Salva contexto da tarefa atual e chama escalonador
     SAVE_CONTEXT(READY);
-
-    // Chama o escalonador para definir qual a próxima tarefa será executada
     scheduler();
-    // Restaura o contexto da tarefa que entrará em execução
+    // Restaura contexto da próxima tarefa
     RESTORE_CONTEXT();
 
     ei();
