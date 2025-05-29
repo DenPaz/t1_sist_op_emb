@@ -16,7 +16,6 @@ void adc_init(void)
 
 uint16_t adc_read(void)
 {
-    delay(5);
     ADCON0bits.GO = 1;          // Inicia conversão
     while (ADCON0bits.GO);      // Aguarda fim da conversão
     return ((uint16_t)ADRESH << 8) | ADRESL;
@@ -26,10 +25,8 @@ uint16_t adc_read(void)
 void pwm_init(void)
 {
     TRISCbits.RC2 = 0;          // RC2 como saída (CCP1)
-
     T2CON = 0b00000111;         // Timer2 ligado, prescaler 1:16
     PR2 = 255;                  // Período PWM
-
     CCP1CON = 0b00001100;       // Modo PWM
     CCPR1L = 0;
     CCP1CONbits.DC1B = 0;

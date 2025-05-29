@@ -18,10 +18,11 @@ TASK tarefa_acelerador()
 {
     while (1)
     {
+        LATDbits.LATD1 = 1;                // LED T2 ON
         uint16_t raw = adc_read();
-        uint8_t data = (uint8_t)(raw >> 2); // reduz para 8 bits
+        uint8_t data = raw >> 2;
         write_pipe(&accel_pipe, data);
-        delay(10); // 10 ticks (ajustar conforme necessidade)
+        LATDbits.LATD1 = 0;                // LED T2 OFF
     }
 }
 
@@ -30,34 +31,40 @@ TASK tarefa_controle_central()
 {
     while (1)
     {
-        uint8_t data = 0;
+        LATDbits.LATD2 = 1;  // LED T3 ON
+        uint8_t data;
         read_pipe(&accel_pipe, &data);
-        uint8_t duty = data % 100;       // exemplo de mapeamento
-
+        uint8_t duty = data % 100;
         mutex_lock(&buffer_mutex);
         accel_data = duty;
         mutex_unlock(&buffer_mutex);
-
-        delay(5);
+        LATDbits.LATD2 = 0;  // LED T3 OFF
     }
 }
 
-// Tarefa 3: l� buffer e ajusta PWM (CCP1)
 TASK tarefa_injecao_eletronica()
 {
     while (1)
     {
+        LATDbits.LATD0 = 1;  // LED T1 ON
+        static uint8_t last_duty = 255;
         uint8_t duty;
+
         mutex_lock(&buffer_mutex);
         duty = accel_data;
         mutex_unlock(&buffer_mutex);
 
-        pwm_set(duty);   // usa apenas CCP1
-        delay(5);
+        if (duty != last_duty)
+        {
+            pwm_set(duty);
+            last_duty = duty;
+        }
+
+        yield();
+        LATDbits.LATD0 = 0;  // LED T1 OFF
     }
 }
 
-// Tarefa 4: controle de estabilidade one-shot
 TASK tarefa_estabilidade()
 {
     while (1)
@@ -65,15 +72,14 @@ TASK tarefa_estabilidade()
         if (est_flag)
         {
             est_flag = 0;
-            LATDbits.LD3 = 1; // aciona freios
-            delay(100);
-            LATDbits.LD3 = 0;
-            
+            LATDbits.LATD3 = 1;  // LED T4 ON
+            delay(2);
+            LATDbits.LATD3 = 0;  // LED T4 OFF
         }
-        // bloqueia até próxima interrupção
         change_state(WAITING);
     }
 }
+
 
 void user_config()
 {

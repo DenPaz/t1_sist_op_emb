@@ -11,7 +11,7 @@
 
 #define IDLE_DEBUG OFF
 #define DYNAMIC_MEM ON
-#define PIPE_SIZE 3
+#define PIPE_SIZE 4
 
 #define _XTAL_FREQ 4000000UL
 

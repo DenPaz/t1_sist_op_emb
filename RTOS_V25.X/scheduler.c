@@ -29,20 +29,20 @@ void __reentrant rr_scheduler()
              r_queue.task_running == 0);
 }
 
-// Conferir este escalonador -> e se tiverem duas tasks com mesma prioridade?
 void __reentrant priority_scheduler()
 {
-    uint8_t highest_priority = 0;
-    uint8_t selected = 0;
-
-    for (uint8_t i = 1; i < r_queue.ready_queue_size; i++)
-    {
-        if (r_queue.ready_queue[i].task_state == READY &&
-            r_queue.ready_queue[i].task_priority > highest_priority)
-        {
-            highest_priority = r_queue.ready_queue[i].task_priority;
-            selected = i;
+    // Seleciona tarefa READY com menor valor de priority (0 = maior prioridade)
+    uint8_t best_priority = 0xFF;
+    int selected = -1;
+    for (uint8_t i = 0; i < r_queue.ready_queue_size; i++) {
+        tcb_t *t = &r_queue.ready_queue[i];
+        if (t->task_state == READY) {
+            if ((uint8_t)t->task_priority < best_priority) {
+                best_priority = t->task_priority;
+                selected = i;
+            }
         }
     }
-    r_queue.task_running = selected;
+    // Se não encontrou READY, seleciona idle (índice 0)
+    r_queue.task_running = (selected >= 0) ? selected : 0;
 }

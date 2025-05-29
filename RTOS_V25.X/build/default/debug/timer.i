@@ -6016,7 +6016,12 @@ TASK tarefa_estabilidade(void);
 
 void user_config(void);
 # 6 "timer.c" 2
+# 1 "C:\\Program Files\\Microchip\\xc8\\v3.00\\pic\\include\\c99/stdbool.h" 1 3
+# 7 "timer.c" 2
+extern ready_queue_t r_queue;
 
+
+static _Bool est_created = 0;
 
 void __attribute__((picinterrupt(("")))) ISR(void)
 {
@@ -6027,12 +6032,17 @@ void __attribute__((picinterrupt(("")))) ISR(void)
     {
         INTCONbits.INT0IF = 0;
 
-        create_task(4, 1, tarefa_estabilidade);
+        if (!est_created) {
 
-        for (uint8_t idx = 0; idx < r_queue.ready_queue_size; idx++) {
-            uint8_t tid = r_queue.ready_queue[idx].task_id;
-            if (tid != 0 && tid != 4) {
-                r_queue.ready_queue[idx].task_state = WAITING;
+            create_task(4, 1, tarefa_estabilidade);
+            est_created = 1;
+        } else {
+
+            for (uint8_t i = 0; i < r_queue.ready_queue_size; i++) {
+                if (r_queue.ready_queue[i].task_id == 4) {
+                    r_queue.ready_queue[i].task_state = READY;
+                    break;
+                }
             }
         }
     }

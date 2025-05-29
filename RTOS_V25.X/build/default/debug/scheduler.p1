@@ -597,50 +597,58 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :UE 394 ]
 }
 [v F3386 `(v ~T0 @X0 1 tf ]
-"33
-[; ;scheduler.c: 33: void __attribute__((reentrant)) priority_scheduler()
+"32
+[; ;scheduler.c: 32: void __attribute__((reentrant)) priority_scheduler()
 [v _priority_scheduler `RF3386 ~T0 @X0 1 e ]
-"34
-[; ;scheduler.c: 34: {
+"33
+[; ;scheduler.c: 33: {
 {
 [e :U _priority_scheduler ]
 [f ]
 "35
-[; ;scheduler.c: 35:     uint8_t highest_priority = 0;
-[v _highest_priority `uc ~T0 @X0 1 a ]
-[e = _highest_priority -> -> 0 `i `uc ]
+[; ;scheduler.c: 35:     uint8_t best_priority = 0xFF;
+[v _best_priority `uc ~T0 @X0 1 a ]
+[e = _best_priority -> -> 255 `i `uc ]
 "36
-[; ;scheduler.c: 36:     uint8_t selected = 0;
-[v _selected `uc ~T0 @X0 1 a ]
-[e = _selected -> -> 0 `i `uc ]
-"38
-[; ;scheduler.c: 38:     for (uint8_t i = 1; i < r_queue.ready_queue_size; i++)
+[; ;scheduler.c: 36:     int selected = -1;
+[v _selected `i ~T0 @X0 1 a ]
+[e = _selected -U -> 1 `i ]
+"37
+[; ;scheduler.c: 37:     for (uint8_t i = 0; i < r_queue.ready_queue_size; i++) {
 {
 [v _i `uc ~T0 @X0 1 a ]
-[e = _i -> -> 1 `i `uc ]
+[e = _i -> -> 0 `i `uc ]
 [e $U 404  ]
 [e :U 401 ]
+{
+"38
+[; ;scheduler.c: 38:         tcb_t *t = &r_queue.ready_queue[i];
+[v _t `*S391 ~T0 @X0 1 a ]
+[e = _t &U *U + &U . _r_queue 0 * -> _i `ux -> -> # *U &U . _r_queue 0 `ui `ux ]
 "39
-[; ;scheduler.c: 39:     {
+[; ;scheduler.c: 39:         if (t->task_state == READY) {
+[e $ ! == -> . *U _t 2 `ui -> . `E3354 0 `ui 405  ]
 {
 "40
-[; ;scheduler.c: 40:         if (r_queue.ready_queue[i].task_state == READY &&
-[e $ ! && == -> . *U + &U . _r_queue 0 * -> _i `ux -> -> # *U &U . _r_queue 0 `ui `ux 2 `ui -> . `E3354 0 `ui > -> . *U + &U . _r_queue 0 * -> _i `ux -> -> # *U &U . _r_queue 0 `ui `ux 1 `i -> _highest_priority `i 405  ]
-"42
-[; ;scheduler.c: 42:         {
+[; ;scheduler.c: 40:             if ((uint8_t)t->task_priority < best_priority) {
+[e $ ! < -> . *U _t 1 `i -> _best_priority `i 406  ]
 {
+"41
+[; ;scheduler.c: 41:                 best_priority = t->task_priority;
+[e = _best_priority . *U _t 1 ]
+"42
+[; ;scheduler.c: 42:                 selected = i;
+[e = _selected -> _i `i ]
 "43
-[; ;scheduler.c: 43:             highest_priority = r_queue.ready_queue[i].task_priority;
-[e = _highest_priority . *U + &U . _r_queue 0 * -> _i `ux -> -> # *U &U . _r_queue 0 `ui `ux 1 ]
+[; ;scheduler.c: 43:             }
+}
+[e :U 406 ]
 "44
-[; ;scheduler.c: 44:             selected = i;
-[e = _selected _i ]
-"45
-[; ;scheduler.c: 45:         }
+[; ;scheduler.c: 44:         }
 }
 [e :U 405 ]
-"46
-[; ;scheduler.c: 46:     }
+"45
+[; ;scheduler.c: 45:     }
 }
 [e ++ _i -> -> 1 `i `uc ]
 [e :U 404 ]
@@ -648,8 +656,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U 402 ]
 }
 "47
-[; ;scheduler.c: 47:     r_queue.task_running = selected;
-[e = . _r_queue 1 _selected ]
+[; ;scheduler.c: 47:     r_queue.task_running = (selected >= 0) ? selected : 0;
+[e = . _r_queue 1 -> ? >= _selected -> 0 `i : _selected -> 0 `i `uc ]
 "48
 [; ;scheduler.c: 48: }
 [e :UE 400 ]

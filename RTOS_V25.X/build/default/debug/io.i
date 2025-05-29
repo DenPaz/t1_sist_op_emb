@@ -6025,7 +6025,6 @@ void adc_init(void)
 
 uint16_t adc_read(void)
 {
-    delay(5);
     ADCON0bits.GO = 1;
     while (ADCON0bits.GO);
     return ((uint16_t)ADRESH << 8) | ADRESL;
@@ -6035,10 +6034,8 @@ uint16_t adc_read(void)
 void pwm_init(void)
 {
     TRISCbits.RC2 = 0;
-
     T2CON = 0b00000111;
     PR2 = 255;
-
     CCP1CON = 0b00001100;
     CCPR1L = 0;
     CCP1CONbits.DC1B = 0;

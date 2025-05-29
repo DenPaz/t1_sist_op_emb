@@ -6051,11 +6051,11 @@ void SRAMInitHeap(void);
 
 void create_pipe(pipe_t *p)
 {
-    p->pipe_msg = (uint8_t *)SRAMalloc(3);
+    p->pipe_msg = (uint8_t *)SRAMalloc(4);
     p->pipe_pos_read = 0;
     p->pipe_pos_write = 0;
     sem_init(&p->pipe_sem_read, 0);
-    sem_init(&p->pipe_sem_write, 3);
+    sem_init(&p->pipe_sem_write, 4);
 }
 
 void write_pipe(pipe_t *p, uint8_t data)
@@ -6063,7 +6063,7 @@ void write_pipe(pipe_t *p, uint8_t data)
     (INTCONbits.GIE = 0);
     sem_wait(&p->pipe_sem_write);
     p->pipe_msg[p->pipe_pos_write] = data;
-    p->pipe_pos_write = (p->pipe_pos_write + 1) % 3;
+    p->pipe_pos_write = (p->pipe_pos_write + 1) % 4;
     sem_post(&p->pipe_sem_read);
     (INTCONbits.GIE = 1);
 }
@@ -6073,7 +6073,7 @@ void read_pipe(pipe_t *p, uint8_t *data)
     (INTCONbits.GIE = 0);
     sem_wait(&p->pipe_sem_read);
     *data = p->pipe_msg[p->pipe_pos_read];
-    p->pipe_pos_read = (p->pipe_pos_read + 1) % 3;
+    p->pipe_pos_read = (p->pipe_pos_read + 1) % 4;
     sem_post(&p->pipe_sem_write);
     (INTCONbits.GIE = 1);
 }

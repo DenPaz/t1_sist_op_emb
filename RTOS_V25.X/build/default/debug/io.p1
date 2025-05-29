@@ -25,10 +25,7 @@ Version 4.0 HI-TECH Software Intermediate Code
 "3455
 [; ;C:\Program Files\Microchip\xc8\v3.00\pic\include\proc/pic18f4550.h: 3455: extern volatile TRISAbits_t TRISAbits __attribute__((address(0xF92)));
 [v _TRISAbits `VS141 ~T0 @X0 0 e@3986 ]
-"11 ./kernel.h
-[; ;./kernel.h: 11: void delay(uint16_t time);
-[v _delay `(v ~T0 @X0 0 ef1`us ]
-"6670 C:\Program Files\Microchip\xc8\v3.00\pic\include\proc/pic18f4550.h
+"6670
 [; ;C:\Program Files\Microchip\xc8\v3.00\pic\include\proc/pic18f4550.h: 6670:     struct {
 [s S273 :1 `uc 1 :1 `uc 1 ]
 [n S273 . . GO_NOT_DONE ]
@@ -717,115 +714,112 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U _adc_read ]
 [f ]
 "19
-[; ;io.c: 19:     delay(5);
-[e ( _delay (1 -> -> 5 `i `us ]
-"20
-[; ;io.c: 20:     ADCON0bits.GO = 1;
+[; ;io.c: 19:     ADCON0bits.GO = 1;
 [e = . . _ADCON0bits 4 1 -> -> 1 `i `uc ]
-"21
-[; ;io.c: 21:     while (ADCON0bits.GO);
+"20
+[; ;io.c: 20:     while (ADCON0bits.GO);
 [e $U 395  ]
 [e :U 396 ]
 [e :U 395 ]
 [e $ != -> . . _ADCON0bits 4 1 `i -> 0 `i 396  ]
 [e :U 397 ]
-"22
-[; ;io.c: 22:     return ((uint16_t)ADRESH << 8) | ADRESL;
+"21
+[; ;io.c: 21:     return ((uint16_t)ADRESH << 8) | ADRESL;
 [e ) -> | << -> -> _ADRESH `us `ui -> 8 `i -> _ADRESL `ui `us ]
 [e $UE 394  ]
-"23
-[; ;io.c: 23: }
+"22
+[; ;io.c: 22: }
 [e :UE 394 ]
 }
-"26
-[; ;io.c: 26: void pwm_init(void)
+"25
+[; ;io.c: 25: void pwm_init(void)
 [v _pwm_init `(v ~T0 @X0 1 ef ]
-"27
-[; ;io.c: 27: {
+"26
+[; ;io.c: 26: {
 {
 [e :U _pwm_init ]
 [f ]
-"28
-[; ;io.c: 28:     TRISCbits.RC2 = 0;
+"27
+[; ;io.c: 27:     TRISCbits.RC2 = 0;
 [e = . . _TRISCbits 1 2 -> -> 0 `i `uc ]
-"30
-[; ;io.c: 30:     T2CON = 0b00000111;
+"28
+[; ;io.c: 28:     T2CON = 0b00000111;
 [e = _T2CON -> -> 7 `i `uc ]
-"31
-[; ;io.c: 31:     PR2 = 255;
+"29
+[; ;io.c: 29:     PR2 = 255;
 [e = _PR2 -> -> 255 `i `uc ]
-"33
-[; ;io.c: 33:     CCP1CON = 0b00001100;
+"30
+[; ;io.c: 30:     CCP1CON = 0b00001100;
 [e = _CCP1CON -> -> 12 `i `uc ]
-"34
-[; ;io.c: 34:     CCPR1L = 0;
+"31
+[; ;io.c: 31:     CCPR1L = 0;
 [e = _CCPR1L -> -> 0 `i `uc ]
-"35
-[; ;io.c: 35:     CCP1CONbits.DC1B = 0;
+"32
+[; ;io.c: 32:     CCP1CONbits.DC1B = 0;
 [e = . . _CCP1CONbits 0 1 -> -> 0 `i `uc ]
-"36
-[; ;io.c: 36: }
+"33
+[; ;io.c: 33: }
 [e :UE 398 ]
 }
-"38
-[; ;io.c: 38: void pwm_set(uint8_t duty_cycle)
+"35
+[; ;io.c: 35: void pwm_set(uint8_t duty_cycle)
 [v _pwm_set `(v ~T0 @X0 1 ef1`uc ]
-"39
-[; ;io.c: 39: {
+"36
+[; ;io.c: 36: {
 {
 [e :U _pwm_set ]
-"38
-[; ;io.c: 38: void pwm_set(uint8_t duty_cycle)
+"35
+[; ;io.c: 35: void pwm_set(uint8_t duty_cycle)
 [v _duty_cycle `uc ~T0 @X0 1 r1 ]
-"39
-[; ;io.c: 39: {
+"36
+[; ;io.c: 36: {
 [f ]
-"40
-[; ;io.c: 40:     uint16_t duty = duty_cycle;
+"37
+[; ;io.c: 37:     uint16_t duty = duty_cycle;
 [v _duty `us ~T0 @X0 1 a ]
 [e = _duty -> _duty_cycle `us ]
-"41
-[; ;io.c: 41:     duty = duty << 2;
+"38
+[; ;io.c: 38:     duty = duty << 2;
 [e = _duty -> << -> _duty `ui -> 2 `i `us ]
-"43
-[; ;io.c: 43:     if (duty > 1023) duty = 1023;
+"40
+[; ;io.c: 40:     if (duty > 1023) duty = 1023;
 [e $ ! > -> _duty `ui -> -> 1023 `i `ui 400  ]
 [e = _duty -> -> 1023 `i `us ]
 [e :U 400 ]
-"45
-[; ;io.c: 45:     CCPR1L = duty >> 2;
+"42
+[; ;io.c: 42:     CCPR1L = duty >> 2;
 [e = _CCPR1L -> >> -> _duty `ui -> 2 `i `uc ]
-"46
-[; ;io.c: 46:     CCP1CONbits.DC1B = duty & 0x03;
+"43
+[; ;io.c: 43:     CCP1CONbits.DC1B = duty & 0x03;
 [e = . . _CCP1CONbits 0 1 -> & -> _duty `ui -> -> 3 `i `ui `uc ]
-"47
-[; ;io.c: 47: }
+"44
+[; ;io.c: 44: }
 [e :UE 399 ]
 }
-"50
-[; ;io.c: 50: void int_ext_init(void)
+"47
+[; ;io.c: 47: void int_ext_init(void)
 [v _int_ext_init `(v ~T0 @X0 1 ef ]
-"51
-[; ;io.c: 51: {
+"48
+[; ;io.c: 48: {
 {
 [e :U _int_ext_init ]
 [f ]
-"52
-[; ;io.c: 52:     TRISBbits.RB0 = 1;
+"49
+[; ;io.c: 49:     TRISBbits.RB0 = 1;
 [e = . . _TRISBbits 1 0 -> -> 1 `i `uc ]
-"53
-[; ;io.c: 53:     INTCON2bits.INTEDG0 = 1;
+"50
+[; ;io.c: 50:     INTCON2bits.INTEDG0 = 1;
 [e = . . _INTCON2bits 1 6 -> -> 1 `i `uc ]
-"54
-[; ;io.c: 54:     INTCONbits.INT0IF = 0;
+"51
+[; ;io.c: 51:     INTCONbits.INT0IF = 0;
 [e = . . _INTCONbits 0 1 -> -> 0 `i `uc ]
-"55
-[; ;io.c: 55:     INTCONbits.INT0IE = 1;
+"52
+[; ;io.c: 52:     INTCONbits.INT0IE = 1;
 [e = . . _INTCONbits 0 4 -> -> 1 `i `uc ]
-"56
-[; ;io.c: 56:     INTCONbits.GIE = 1;
+"53
+[; ;io.c: 53:     INTCONbits.GIE = 1;
 [e = . . _INTCONbits 1 7 -> -> 1 `i `uc ]
-"57
-[; ;io.c: 57: }
+"54
+[; ;io.c: 54: }
 [e :UE 401 ]
 }
