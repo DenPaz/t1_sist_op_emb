@@ -1,0 +1,363 @@
+Version 4.0 HI-TECH Software Intermediate Code
+"24 ./mem.h
+[; ;./mem.h: 24:  {
+[s S2 :7 `uc 1 :1 `uc 1 ]
+[n S2 _BITS count alloc ]
+"21
+[; ;./mem.h: 21: {
+[u S1 `uc 1 `S2 1 ]
+[n S1 _SALLOC byte bits ]
+"111 mem.c
+[; ;mem.c: 111:      unsigned char _SRAMmerge(SALLOC * pSegA);
+[v __SRAMmerge `(uc ~T0 @X0 0 ef1`*S1 ]
+"18 ./mem.h
+[; ;./mem.h: 18: unsigned char _uDynamicHeap[0x50];
+[v __uDynamicHeap `uc ~T0 @X0 -> 80 `i e ]
+"138 mem.c
+[; ;mem.c: 138: unsigned char * SRAMalloc( unsigned char nBytes)
+[v _SRAMalloc `(*uc ~T0 @X0 1 ef1`uc ]
+"139
+[; ;mem.c: 139: {
+{
+[e :U _SRAMalloc ]
+"138
+[; ;mem.c: 138: unsigned char * SRAMalloc( unsigned char nBytes)
+[v _nBytes `uc ~T0 @X0 1 r1 ]
+"139
+[; ;mem.c: 139: {
+[f ]
+"140
+[; ;mem.c: 140:  SALLOC * pHeap;
+[v _pHeap `*S1 ~T0 @X0 1 a ]
+"141
+[; ;mem.c: 141:  SALLOC * temp;
+[v _temp `*S1 ~T0 @X0 1 a ]
+"142
+[; ;mem.c: 142:       SALLOC segHeader;
+[v _segHeader `S1 ~T0 @X0 1 a ]
+"143
+[; ;mem.c: 143:       unsigned char segLen;
+[v _segLen `uc ~T0 @X0 1 a ]
+"146
+[; ;mem.c: 146:  if (nBytes > (0x7F - 1))
+[e $ ! > -> _nBytes `i - -> 127 `i -> 1 `i 4  ]
+"147
+[; ;mem.c: 147:   return (0);
+[e ) -> -> 0 `i `*uc ]
+[e $UE 3  ]
+[e :U 4 ]
+"150
+[; ;mem.c: 150:  pHeap = (SALLOC *)_uDynamicHeap;
+[e = _pHeap -> &U __uDynamicHeap `*S1 ]
+"152
+[; ;mem.c: 152:  while (1)
+[e :U 6 ]
+"153
+[; ;mem.c: 153:  {
+{
+"155
+[; ;mem.c: 155:   segHeader = *pHeap;
+[e = _segHeader *U _pHeap ]
+"158
+[; ;mem.c: 158:   segLen = segHeader.bits.count - 1;
+[e = _segLen -> - -> . . _segHeader 1 0 `i -> 1 `i `uc ]
+"161
+[; ;mem.c: 161:   if (segHeader.byte == 0)
+[e $ ! == -> . _segHeader 0 `i -> 0 `i 8  ]
+"162
+[; ;mem.c: 162:    return (0);
+[e ) -> -> 0 `i `*uc ]
+[e $UE 3  ]
+[e :U 8 ]
+"165
+[; ;mem.c: 165:   if (!(segHeader.bits.alloc))
+[e $ ! ! != -> . . _segHeader 1 1 `i -> 0 `i 9  ]
+"166
+[; ;mem.c: 166:   {
+{
+"168
+[; ;mem.c: 168:    if (nBytes > segLen)
+[e $ ! > -> _nBytes `i -> _segLen `i 10  ]
+"169
+[; ;mem.c: 169:    {
+{
+"171
+[; ;mem.c: 171:     if (!(_SRAMmerge(pHeap)))
+[e $ ! ! != -> ( __SRAMmerge (1 _pHeap `i -> 0 `i 11  ]
+"172
+[; ;mem.c: 172:      pHeap += segHeader.bits.count;
+[e =+ _pHeap * -> -> . . _segHeader 1 0 `i `x -> -> # *U _pHeap `i `x ]
+[e :U 11 ]
+"173
+[; ;mem.c: 173:    }
+}
+[e $U 12  ]
+"174
+[; ;mem.c: 174:    else
+[e :U 10 ]
+"178
+[; ;mem.c: 178:     if (nBytes == segLen)
+[e $ ! == -> _nBytes `i -> _segLen `i 13  ]
+"179
+[; ;mem.c: 179:     {
+{
+"181
+[; ;mem.c: 181:      (*pHeap).bits.alloc = 1;
+[e = . . *U _pHeap 1 1 -> -> 1 `i `uc ]
+"184
+[; ;mem.c: 184:      return ((unsigned char *)(pHeap + 1));
+[e ) -> + _pHeap * -> -> 1 `i `x -> -> # *U _pHeap `i `x `*uc ]
+[e $UE 3  ]
+"185
+[; ;mem.c: 185:     }
+}
+[e $U 14  ]
+"188
+[; ;mem.c: 188:     else
+[e :U 13 ]
+"189
+[; ;mem.c: 189:     {
+{
+"191
+[; ;mem.c: 191:      (*pHeap).byte = nBytes + 0x81;
+[e = . *U _pHeap 0 -> + -> _nBytes `i -> 129 `i `uc ]
+"194
+[; ;mem.c: 194:      temp = pHeap + 1;
+[e = _temp + _pHeap * -> -> 1 `i `x -> -> # *U _pHeap `i `x ]
+"197
+[; ;mem.c: 197:      pHeap += (nBytes + 1);
+[e =+ _pHeap * -> + -> _nBytes `i -> 1 `i `x -> -> # *U _pHeap `i `x ]
+"200
+[; ;mem.c: 200:      (*pHeap).byte = segLen - nBytes;
+[e = . *U _pHeap 0 -> - -> _segLen `i -> _nBytes `i `uc ]
+"203
+[; ;mem.c: 203:      return ((unsigned char *)temp);
+[e ) -> _temp `*uc ]
+[e $UE 3  ]
+"204
+[; ;mem.c: 204:     }
+}
+[e :U 14 ]
+[e :U 12 ]
+"205
+[; ;mem.c: 205:   }
+}
+[e $U 15  ]
+"208
+[; ;mem.c: 208:   else
+[e :U 9 ]
+"209
+[; ;mem.c: 209:   {
+{
+"210
+[; ;mem.c: 210:    pHeap += segHeader.bits.count;
+[e =+ _pHeap * -> -> . . _segHeader 1 0 `i `x -> -> # *U _pHeap `i `x ]
+"211
+[; ;mem.c: 211:   }
+}
+[e :U 15 ]
+"212
+[; ;mem.c: 212:  }
+}
+[e :U 5 ]
+[e $U 6  ]
+[e :U 7 ]
+"213
+[; ;mem.c: 213: }
+[e :UE 3 ]
+}
+"235
+[; ;mem.c: 235: void SRAMfree(unsigned char * pSRAM)
+[v _SRAMfree `(v ~T0 @X0 1 ef1`*uc ]
+"236
+[; ;mem.c: 236: {
+{
+[e :U _SRAMfree ]
+"235
+[; ;mem.c: 235: void SRAMfree(unsigned char * pSRAM)
+[v _pSRAM `*uc ~T0 @X0 1 r1 ]
+"236
+[; ;mem.c: 236: {
+[f ]
+"238
+[; ;mem.c: 238:  (*(SALLOC *)(pSRAM - 1)).bits.alloc = 0;
+[e = . . *U -> - _pSRAM * -> -> 1 `i `x -> -> # *U _pSRAM `i `x `*S1 1 1 -> -> 0 `i `uc ]
+"239
+[; ;mem.c: 239: }
+[e :UE 16 ]
+}
+"259
+[; ;mem.c: 259: void SRAMInitHeap(void)
+[v _SRAMInitHeap `(v ~T0 @X0 1 ef ]
+"260
+[; ;mem.c: 260: {
+{
+[e :U _SRAMInitHeap ]
+[f ]
+"261
+[; ;mem.c: 261:  unsigned char * pHeap;
+[v _pHeap `*uc ~T0 @X0 1 a ]
+"262
+[; ;mem.c: 262:       unsigned int count;
+[v _count `ui ~T0 @X0 1 a ]
+"264
+[; ;mem.c: 264:  pHeap = _uDynamicHeap;
+[e = _pHeap &U __uDynamicHeap ]
+"265
+[; ;mem.c: 265:  count = 0x50 - 1;
+[e = _count -> - -> 80 `i -> 1 `i `ui ]
+"267
+[; ;mem.c: 267:  while (1)
+[e :U 19 ]
+"268
+[; ;mem.c: 268:  {
+{
+"269
+[; ;mem.c: 269:   if (count > 0x7F)
+[e $ ! > _count -> -> 127 `i `ui 21  ]
+"270
+[; ;mem.c: 270:   {
+{
+"271
+[; ;mem.c: 271:    *pHeap = 0x7F;
+[e = *U _pHeap -> -> 127 `i `uc ]
+"272
+[; ;mem.c: 272:    pHeap += 0x7F;
+[e =+ _pHeap * -> -> 127 `i `x -> -> # *U _pHeap `i `x ]
+"273
+[; ;mem.c: 273:    count = count - 0x7F;
+[e = _count - _count -> -> 127 `i `ui ]
+"274
+[; ;mem.c: 274:   }
+}
+[e $U 22  ]
+"275
+[; ;mem.c: 275:   else
+[e :U 21 ]
+"276
+[; ;mem.c: 276:   {
+{
+"277
+[; ;mem.c: 277:    *pHeap = (unsigned char)count;
+[e = *U _pHeap -> _count `uc ]
+"278
+[; ;mem.c: 278:    *(pHeap + count) = 0;
+[e = *U + _pHeap * -> _count `ux -> -> # *U _pHeap `ui `ux -> -> 0 `i `uc ]
+"279
+[; ;mem.c: 279:    return;
+[e $UE 17  ]
+"280
+[; ;mem.c: 280:   }
+}
+[e :U 22 ]
+"281
+[; ;mem.c: 281:  }
+}
+[e :U 18 ]
+[e $U 19  ]
+[e :U 20 ]
+"282
+[; ;mem.c: 282: }
+[e :UE 17 ]
+}
+"302
+[; ;mem.c: 302:      unsigned char _SRAMmerge(SALLOC * pSegA)
+[v __SRAMmerge `(uc ~T0 @X0 1 ef1`*S1 ]
+"303
+[; ;mem.c: 303: {
+{
+[e :U __SRAMmerge ]
+"302
+[; ;mem.c: 302:      unsigned char _SRAMmerge(SALLOC * pSegA)
+[v _pSegA `*S1 ~T0 @X0 1 r1 ]
+"303
+[; ;mem.c: 303: {
+[f ]
+"304
+[; ;mem.c: 304:  SALLOC * pSegB;
+[v _pSegB `*S1 ~T0 @X0 1 a ]
+"305
+[; ;mem.c: 305:       SALLOC uSegA, uSegB, uSum;
+[v _uSegA `S1 ~T0 @X0 1 a ]
+[v _uSegB `S1 ~T0 @X0 1 a ]
+[v _uSum `S1 ~T0 @X0 1 a ]
+"308
+[; ;mem.c: 308:  pSegB = pSegA + (*pSegA).byte;
+[e = _pSegB + _pSegA * -> -> . *U _pSegA 0 `i `x -> -> # *U _pSegA `i `x ]
+"311
+[; ;mem.c: 311:  uSegA = *pSegA;
+[e = _uSegA *U _pSegA ]
+"312
+[; ;mem.c: 312:  uSegB = *pSegB;
+[e = _uSegB *U _pSegB ]
+"315
+[; ;mem.c: 315:  if (uSegB.byte == 0)
+[e $ ! == -> . _uSegB 0 `i -> 0 `i 24  ]
+"316
+[; ;mem.c: 316:   return (0);
+[e ) -> -> 0 `i `uc ]
+[e $UE 23  ]
+[e :U 24 ]
+"319
+[; ;mem.c: 319:  if (uSegA.bits.alloc || uSegB.bits.alloc)
+[e $ ! || != -> . . _uSegA 1 1 `i -> 0 `i != -> . . _uSegB 1 1 `i -> 0 `i 25  ]
+"320
+[; ;mem.c: 320:   return (0);
+[e ) -> -> 0 `i `uc ]
+[e $UE 23  ]
+[e :U 25 ]
+"323
+[; ;mem.c: 323:  if (uSegA.bits.count == 0x7F)
+[e $ ! == -> . . _uSegA 1 0 `i -> 127 `i 26  ]
+"324
+[; ;mem.c: 324:   return (0);
+[e ) -> -> 0 `i `uc ]
+[e $UE 23  ]
+[e :U 26 ]
+"327
+[; ;mem.c: 327:  uSum.byte = uSegA.byte + uSegB.byte;
+[e = . _uSum 0 -> + -> . _uSegA 0 `i -> . _uSegB 0 `i `uc ]
+"332
+[; ;mem.c: 332:  if ((uSum.byte) > 0x7F)
+[e $ ! > -> . _uSum 0 `i -> 127 `i 27  ]
+"333
+[; ;mem.c: 333:  {
+{
+"334
+[; ;mem.c: 334:   (*pSegA).byte = 0x7F;
+[e = . *U _pSegA 0 -> -> 127 `i `uc ]
+"335
+[; ;mem.c: 335:   pSegA += 0x7F;
+[e =+ _pSegA * -> -> 127 `i `x -> -> # *U _pSegA `i `x ]
+"336
+[; ;mem.c: 336:   pSegB += uSegB.byte;
+[e =+ _pSegB * -> -> . _uSegB 0 `i `x -> -> # *U _pSegB `i `x ]
+"337
+[; ;mem.c: 337:   (*pSegA).byte = (unsigned char)(pSegB - pSegA);
+[e = . *U _pSegA 0 -> / - -> _pSegB `x -> _pSegA `x -> -> # *U _pSegB `i `x `uc ]
+"339
+[; ;mem.c: 339:   return (0x7F);
+[e ) -> -> 127 `i `uc ]
+[e $UE 23  ]
+"340
+[; ;mem.c: 340:  }
+}
+[e $U 28  ]
+"343
+[; ;mem.c: 343:  else
+[e :U 27 ]
+"344
+[; ;mem.c: 344:  {
+{
+"345
+[; ;mem.c: 345:   return ((*pSegA).byte = uSum.byte);
+[e ) = . *U _pSegA 0 . _uSum 0 ]
+[e $UE 23  ]
+"346
+[; ;mem.c: 346:  }
+}
+[e :U 28 ]
+"347
+[; ;mem.c: 347: }
+[e :UE 23 ]
+}

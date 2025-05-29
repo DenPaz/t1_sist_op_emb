@@ -9,10 +9,10 @@
 
 #define DEFAULT_SCHEDULER PRIORITY_SCHEDULER
 
-#define IDLE_DEBUG ON
+#define IDLE_DEBUG OFF
 #define DYNAMIC_MEM ON
 #define PIPE_SIZE 3
 
-#define _XTAL_FREQ 4000000
+#define _XTAL_FREQ 4000000UL
 
 #endif /* CONFIG_H */

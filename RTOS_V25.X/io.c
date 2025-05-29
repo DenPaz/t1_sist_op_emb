@@ -1,5 +1,6 @@
 #include "io.h"
 #include "config.h"
+#include "kernel.h"
 #include <xc.h>
 
 static void (*ext_int_callback)(void) = 0;
@@ -7,70 +8,50 @@ static void (*ext_int_callback)(void) = 0;
 // ADC
 void adc_init(void)
 {
-    ADCON0 = 0x00;       // Desabilita o ADC
+    ADCON0 = 0x01;       // Habilita o ADC
     ADCON1 = 0x0E;       // AN0 analógico, outros digitais
     ADCON2 = 0b10101010; // A/D Clock = Fosc/32, 4 TAD, justificado à direita
+    TRISAbits.RA0 = 1;
 }
-uint16_t adc_read(uint8_t channel)
+
+uint16_t adc_read(void)
 {
-    ADCON0 = (channel << 2) | 1; // seleciona canal + liga ADC
-    __delay_us(5);               // tempo de aquisição
-    ADCON0bits.GO = 1;           // inicia conversão
-    while (ADCON0bits.GO)
-        ; // aguarda término
+    delay(5);
+    ADCON0bits.GO = 1;          // Inicia convers�o
+    while (ADCON0bits.GO);      // Aguarda fim da convers�o
     return ((uint16_t)ADRESH << 8) | ADRESL;
 }
 
-// Inicialização do PWM (Timer2 + CCP1/CCP2)
+// === PWM (CCP1 / RC2) ===
 void pwm_init(void)
 {
-    // Configura Timer2: prescaler 1:16, PR2 = 249 → período ~1 ms (Fosc=4 MHz)
-    PR2 = 249;
-    T2CON = 0b00000111; // TMR2ON=1, prescaler 1:16
-    // CCP1 em modo PWM na saída RC2
-    TRISCbits.TRISC2 = 0;
-    CCP1CON = 0b00001100;
-    // CCP2 em modo PWM na saída RC1
-    TRISCbits.TRISC1 = 0;
-    CCP2CON = 0b00001100;
+    TRISCbits.RC2 = 0;          // RC2 como sa�da (CCP1)
+
+    T2CON = 0b00000111;         // Timer2 ligado, prescaler 1:16
+    PR2 = 255;                  // Per�odo PWM
+
+    CCP1CON = 0b00001100;       // Modo PWM
+    CCPR1L = 0;
+    CCP1CONbits.DC1B = 0;
 }
 
-// Ajusta duty cycle (0–100%) para o canal de PWM
-void pwm_set(uint8_t channel, uint8_t duty_cycle)
+void pwm_set(uint8_t duty_cycle)
 {
-    uint16_t duty = ((uint32_t)duty_cycle * (PR2 + 1)) / 100;
-    switch (channel)
-    {
-    case 1:
-        CCPR1L = duty >> 2;
-        CCP1CONbits.DC1B = duty & 0x3;
-        break;
-    case 2:
-        CCPR2L = duty >> 2;
-        CCP2CONbits.DC2B1 = (duty >> 1) & 1;
-        CCP2CONbits.DC2B0 = duty & 1;
-        break;
-    case 3:
-        break;
-    }
+    uint16_t duty = duty_cycle;
+    duty = duty << 2;           // Expande 8 bits (0?255) para 10 bits
+
+    if (duty > 1023) duty = 1023;
+
+    CCPR1L = duty >> 2;             // 8 bits mais significativos
+    CCP1CONbits.DC1B = duty & 0x03; // 2 bits menos significativos
 }
 
-// Inicializa interrupção externa (INT0) e registra callback
-void int_ext_init(void (*callback)(void))
+// === INT0 ===
+void int_ext_init(void)
 {
-    ext_int_callback = callback;
-    // configure RB0/INT0 como entrada
-    TRISBbits.TRISB0 = 1;
-    // habilita weak pull-ups (opcional)
-    INTCON2bits.RBPU = 0;
-    // borda de subida
-    INTCON2bits.INTEDG0 = 1;
-    // limpa flag e habilita INT0
-    INTCONbits.INT0IF = 0;
-    INTCONbits.INT0IE = 1;
-}
-void ext_int_service(void)
-{
-    if (ext_int_callback)
-        ext_int_callback();
+    TRISBbits.RB0 = 1;          // RB0 como entrada
+    INTCON2bits.INTEDG0 = 1;    // Borda de subida
+    INTCONbits.INT0IF = 0;      // Limpa flag
+    INTCONbits.INT0IE = 1;      // Habilita INT0
+    INTCONbits.GIE = 1;         // Habilita interrup��es globais
 }

@@ -29,6 +29,7 @@ void __reentrant rr_scheduler()
              r_queue.task_running == 0);
 }
 
+// Conferir este escalonador -> e se tiverem duas tasks com mesma prioridade?
 void __reentrant priority_scheduler()
 {
     uint8_t highest_priority = 0;

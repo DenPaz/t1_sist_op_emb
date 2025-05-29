@@ -4,6 +4,7 @@
 #include "sync.h"
 #include "pipe.h"
 #include "config.h"
+#include "timer.h"
 #include <xc.h>
 
 // Recursos compartilhados
@@ -17,22 +18,21 @@ TASK tarefa_acelerador()
 {
     while (1)
     {
-        uint16_t raw = adc_read(0);
+        uint16_t raw = adc_read();
         uint8_t data = (uint8_t)(raw >> 2); // reduz para 8 bits
         write_pipe(&accel_pipe, data);
         delay(10); // 10 ticks (ajustar conforme necessidade)
     }
 }
 
-// Tarefa 2: recebe do PIPE, calcula tempo de injeção e escreve no buffer com mutex
+// Tarefa 2: recebe do PIPE, calcula duty e grava no buffer
 TASK tarefa_controle_central()
 {
     while (1)
     {
         uint8_t data = 0;
         read_pipe(&accel_pipe, &data);
-        // mapa simples: duty_cycle = data % 100
-        uint8_t duty = data % 100;
+        uint8_t duty = data % 100;       // exemplo de mapeamento
 
         mutex_lock(&buffer_mutex);
         accel_data = duty;
@@ -42,7 +42,7 @@ TASK tarefa_controle_central()
     }
 }
 
-// Tarefa 3: lê buffer e ajusta PWM nos bicos
+// Tarefa 3: l� buffer e ajusta PWM (CCP1)
 TASK tarefa_injecao_eletronica()
 {
     while (1)
@@ -52,18 +52,9 @@ TASK tarefa_injecao_eletronica()
         duty = accel_data;
         mutex_unlock(&buffer_mutex);
 
-        pwm_set(1, duty);
-        pwm_set(2, duty);
-        // pwm_set(3, duty); // canal software
-
+        pwm_set(duty);   // usa apenas CCP1
         delay(5);
     }
-}
-
-// Callback da interrupção externa
-static void stability_callback(void)
-{
-    est_flag = 1;
 }
 
 // Tarefa 4: controle de estabilidade one-shot
@@ -73,33 +64,39 @@ TASK tarefa_estabilidade()
     {
         if (est_flag)
         {
+            est_flag = 0;
             LATDbits.LD3 = 1; // aciona freios
             delay(100);
             LATDbits.LD3 = 0;
-            est_flag = 0;
+            
         }
         // bloqueia até próxima interrupção
         change_state(WAITING);
     }
 }
 
-// Configuração de periféricos e recursos
 void user_config()
 {
-    // LEDs e botões
-    TRISDbits.RD0 = 0; // injeção 3
-    TRISDbits.RD1 = 0; // acelerador
-    TRISDbits.RD2 = 0; // controle central
-    TRISDbits.RD3 = 0; // estabilidade
+    // Configura pinos de indicadores (opcional)
+    TRISDbits.RD0 = 0; // T1 (inje��o)
+    TRISDbits.RD1 = 0; // T2 (acelerador)
+    TRISDbits.RD2 = 0; // T3 (controle central)
+    TRISDbits.RD3 = 0; // T4 (estabilidade)
+    LATD = 0;          // Zera todos os LEDs
 
+    // Inicializa comunica��o entre tarefas
     create_pipe(&accel_pipe);
     mutex_init(&buffer_mutex);
 
-    // Init IO
-    adc_init();
-    pwm_init();
-    int_ext_init(stability_callback);
+    // Inicializa perif�ricos
+    adc_init();        // ADC em AN0
+    pwm_init();        // PWM em CCP1 (RC2)
+    int_ext_init();    // Configura INT0 para tarefa de estabilidade
 
-    // Define globais para otimização
+    // Configura Timer0 para ticks do RTOS
+    config_timer0();
+    start_timer0();
+
+    // Marca��es para o linker
     asm("global _tarefa_acelerador, _tarefa_controle_central, _tarefa_injecao_eletronica, _tarefa_estabilidade");
 }
