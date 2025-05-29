@@ -3,18 +3,18 @@
 
 #include "sync.h"
 #include "types.h"
-#include "config.h"
 
 typedef struct pipe
 {
     uint8_t *pipe_msg;
+    uint8_t pipe_size;
     uint8_t pipe_pos_read;
     uint8_t pipe_pos_write;
     sem_t pipe_sem_read;
     sem_t pipe_sem_write;
 } pipe_t;
 
-void create_pipe(pipe_t *p);
+void create_pipe(pipe_t *p, uint8_t size);
 void write_pipe(pipe_t *p, uint8_t data);
 void read_pipe(pipe_t *p, uint8_t *data);
 

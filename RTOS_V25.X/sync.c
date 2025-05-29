@@ -24,6 +24,7 @@ void sem_wait(sem_t *sem)
         // Bloqueia a tarefa
         sem->s_queue[sem->s_size] = r_queue.task_running;
         sem->s_size = (sem->s_size + 1) % MAX_USER_TASKS;
+        // Força a preempção
         SAVE_CONTEXT(SEM_WAITING);
         scheduler();
         RESTORE_CONTEXT();
@@ -57,6 +58,7 @@ void mutex_lock(mutex_t *m)
     di();
     if (m->flag)
     {
+        // Adquire o mutex
         m->flag = false;
         ei();
     }
@@ -77,14 +79,14 @@ void mutex_unlock(mutex_t *m)
     di();
     if (m->s_pos_out != m->s_size)
     {
-        // Desbloqueia a tarefa mais antiga
-        uint8_t tid = m->s_queue[m->s_pos_out];
-        r_queue.ready_queue[tid].task_state = READY;
+        // Desbloqueia a próxima tarefa na fila
+        uint8_t next = m->s_queue[m->s_pos_out];
+        r_queue.ready_queue[next].task_state = READY;
         m->s_pos_out = (m->s_pos_out + 1) % MAX_USER_TASKS;
     }
     else
     {
-        // Nenhuma tarefa aguardando
+        // Nenhuma tarefa bloqueada, libera o mutex
         m->flag = true;
     }
     ei();

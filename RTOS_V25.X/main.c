@@ -5,10 +5,10 @@ int main()
 {
     os_init();
 
-    create_task(1, 1, tarefa_acelerador);
-    create_task(2, 2, tarefa_controle_central);
-    create_task(3, 2, tarefa_injecao_eletronica);
-    create_task(4, 3, tarefa_estabilidade);
+    // Tarefas de exemplo
+    create_task(1, 3, tarefa_1);
+    create_task(2, 3, tarefa_2);
+    create_task(3, 3, tarefa_3);
 
     os_start();
 

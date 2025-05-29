@@ -12,7 +12,10 @@
 #define IDLE_DEBUG ON
 #define DYNAMIC_MEM ON
 #define PIPE_SIZE 3
-
 #define _XTAL_FREQ 4000000
+
+#define APP_1 OFF
+#define APP_2 OFF
+#define APP_3 ON
 
 #endif /* CONFIG_H */

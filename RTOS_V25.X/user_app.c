@@ -1,105 +1,147 @@
 #include "user_app.h"
 #include "kernel.h"
-#include "io.h"
 #include "sync.h"
 #include "pipe.h"
 #include "config.h"
-#include <xc.h>
 
-// Recursos compartilhados
-pipe_t accel_pipe;
-mutex_t buffer_mutex;
-volatile uint8_t accel_data = 0;
-volatile uint8_t est_flag = 0;
+#if APP_1 == ON
 
-// Tarefa 1: lê ADC e envia via PIPE
-TASK tarefa_acelerador()
+TASK tarefa_1()
 {
     while (1)
     {
-        uint16_t raw = adc_read(0);
-        uint8_t data = (uint8_t)(raw >> 2); // reduz para 8 bits
-        write_pipe(&accel_pipe, data);
-        delay(10); // 10 ticks (ajustar conforme necessidade)
+        LATDbits.LD0 = ~PORTDbits.RD0;
     }
 }
 
-// Tarefa 2: recebe do PIPE, calcula tempo de injeção e escreve no buffer com mutex
-TASK tarefa_controle_central()
+TASK tarefa_2()
 {
     while (1)
     {
-        uint8_t data = 0;
-        read_pipe(&accel_pipe, &data);
-        // mapa simples: duty_cycle = data % 100
-        uint8_t duty = data % 100;
-
-        mutex_lock(&buffer_mutex);
-        accel_data = duty;
-        mutex_unlock(&buffer_mutex);
-
-        delay(5);
+        LATDbits.LD1 = ~PORTDbits.RD1;
     }
 }
 
-// Tarefa 3: lê buffer e ajusta PWM nos bicos
-TASK tarefa_injecao_eletronica()
+TASK tarefa_3()
 {
     while (1)
     {
-        uint8_t duty;
-        mutex_lock(&buffer_mutex);
-        duty = accel_data;
-        mutex_unlock(&buffer_mutex);
-
-        pwm_set(1, duty);
-        pwm_set(2, duty);
-        // pwm_set(3, duty); // canal software
-
-        delay(5);
+        LATDbits.LD2 = ~PORTDbits.RD2;
     }
 }
 
-// Callback da interrupção externa
-static void stability_callback(void)
-{
-    est_flag = 1;
-}
-
-// Tarefa 4: controle de estabilidade one-shot
-TASK tarefa_estabilidade()
-{
-    while (1)
-    {
-        if (est_flag)
-        {
-            LATDbits.LD3 = 1; // aciona freios
-            delay(100);
-            LATDbits.LD3 = 0;
-            est_flag = 0;
-        }
-        // bloqueia até próxima interrupção
-        change_state(WAITING);
-    }
-}
-
-// Configuração de periféricos e recursos
 void user_config()
 {
-    // LEDs e botões
-    TRISDbits.RD0 = 0; // injeção 3
-    TRISDbits.RD1 = 0; // acelerador
-    TRISDbits.RD2 = 0; // controle central
-    TRISDbits.RD3 = 0; // estabilidade
+    TRISDbits.RD0 = 0;
+    TRISDbits.RD1 = 0;
+    TRISDbits.RD2 = 0;
 
-    create_pipe(&accel_pipe);
-    mutex_init(&buffer_mutex);
-
-    // Init IO
-    adc_init();
-    pwm_init();
-    int_ext_init(stability_callback);
-
-    // Define globais para otimização
-    asm("global _tarefa_acelerador, _tarefa_controle_central, _tarefa_injecao_eletronica, _tarefa_estabilidade");
+    // Define as tarefas como funções globais para
+    // evitar que o compilador as retire na fase
+    // de geração de otimização.
+    asm("global _tarefa_1, _tarefa_2, _tarefa_3");
 }
+
+#elif APP_2 == ON
+
+sem_t s;
+
+TASK tarefa_1()
+{
+    while (1)
+    {
+        LATDbits.LATD7 = ~PORTDbits.RD7;
+        // sem_wait(&s);
+        LATDbits.LD0 = ~PORTDbits.RD0;
+        // change_state(WAITING);
+        // delay(50);
+    }
+}
+
+TASK tarefa_2()
+{
+    while (1)
+    {
+        // sem_wait(&s);
+        LATDbits.LD1 = ~PORTDbits.RD1;
+        // change_state(WAITING);
+    }
+}
+
+TASK tarefa_3()
+{
+    while (1)
+    {
+        // sem_wait(&s);
+        LATDbits.LD2 = ~PORTDbits.RD2;
+        // change_state(WAITING);
+    }
+}
+
+void user_config()
+{
+    TRISDbits.RD0 = 0;
+    TRISDbits.RD1 = 0;
+    TRISDbits.RD2 = 0;
+
+    // Inicializar o semáforo
+    sem_init(&s, 0);
+
+    // Define as tarefas como funções globais para
+    // evitar que o compilador as retire na fase
+    // de geração de otimização.
+    asm("global _tarefa_1, _tarefa_2, _tarefa_3");
+}
+
+#elif APP_3 == ON
+
+pipe_t pipe;
+
+TASK tarefa_1()
+{
+    while (1)
+    {
+        LATDbits.LD0 = ~PORTDbits.RD0;
+    }
+}
+
+TASK tarefa_2()
+{
+    uint8_t dados[3] = {'L', 'D', 'D'};
+    int i = 0;
+
+    while (1)
+    {
+        write_pipe(&pipe, dados[i]);
+        i = (i + 1) % 3;
+        LATDbits.LD1 = ~PORTDbits.RD1;
+    }
+}
+
+TASK tarefa_3()
+{
+    uint8_t dado_pipe = 0;
+    while (1)
+    {
+        read_pipe(&pipe, &dado_pipe);
+        if (dado_pipe == 'L')
+        {
+            LATDbits.LD2 = 1;
+        }
+        else if (dado_pipe == 'D')
+        {
+            LATDbits.LD2 = 0;
+        }
+    }
+}
+
+void user_config()
+{
+    TRISDbits.RD0 = 0;
+    TRISDbits.RD1 = 0;
+    TRISDbits.RD2 = 0;
+    create_pipe(&pipe, PIPE_SIZE);
+    asm("global _tarefa_1, _tarefa_2, _tarefa_3");
+}
+
+#endif

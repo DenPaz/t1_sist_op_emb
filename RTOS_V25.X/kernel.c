@@ -3,6 +3,7 @@
 #include "user_app.h"
 #include "timer.h"
 #include "config.h"
+#include "scheduler.h"
 #include "mem.h"
 
 // Declara fila de aptos
@@ -55,7 +56,6 @@ void os_init()
     // Cria a tarefa idle
     create_task(0, 0, idle);
     asm("global _idle");
-
     config_timer0();
 
 #if DYNAMIC_MEM == ON
@@ -66,13 +66,11 @@ void os_init()
 void os_start()
 {
 #if DEFAULT_SCHEDULER == PRIORITY_SCHEDULER
-// Ordenada a fila de aptos
+    scheduler();
 #endif
     user_config();
-
     // Habilita as interrupções
     ei();
-
     // Liga o timer
     start_timer0();
 }
@@ -80,11 +78,9 @@ void os_start()
 void change_state(state_t new_state)
 {
     di();
-
     SAVE_CONTEXT(new_state);
     scheduler();
     RESTORE_CONTEXT();
-
     ei();
 }
 
