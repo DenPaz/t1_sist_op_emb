@@ -13,9 +13,9 @@ void config_timer0()
     INTCONbits.TMR0IF = 0;
     // Transição do timer por referência interna
     T0CONbits.T0CS = 0;
-    // Ativa preescaler para o timer zero
+    // Ativa prescaler para o timer zero
     T0CONbits.PSA = 0;
-    // Preesclaer 1:64
+    // Prescaler 1:64
     T0CONbits.T0PS = 0b101;
     // Valor inicial do timer
     TMR0 = 0;
