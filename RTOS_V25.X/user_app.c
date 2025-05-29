@@ -56,6 +56,8 @@ TASK tarefa_injecao(void)
 
         pwm_set_duty(1, duty); // CCP1 (RC2)
         pwm_set_duty(2, duty); // CCP2 (RC1)
+
+        delay(1); // aguarda PWM estabilizar
     }
 }
 
