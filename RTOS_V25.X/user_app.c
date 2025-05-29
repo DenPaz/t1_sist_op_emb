@@ -24,7 +24,7 @@ TASK tarefa_acelerador(void)
     }
 }
 
-TASK tarefa_controle(void)
+TASK tarefa_controle_central(void)
 {
     uint8_t hi, lo;
     uint16_t pos, duty, max;
@@ -45,7 +45,7 @@ TASK tarefa_controle(void)
     }
 }
 
-TASK tarefa_injecao(void)
+TASK tarefa_injecao_eletronica(void)
 {
     uint16_t duty;
     while (1)
@@ -61,7 +61,7 @@ TASK tarefa_injecao(void)
     }
 }
 
-TASK tarefa_estabilidade(void)
+TASK tarefa_controle_estabilidade(void)
 {
     LATDbits.LATD2 = 1; // LED ESTABILIDADE ligado
     while (1)
@@ -84,8 +84,8 @@ void user_config(void)
     create_pipe(&pipe, PIPE_SIZE);
 
     create_task(ID_ACEL, PRIO_ACEL, tarefa_acelerador);
-    create_task(ID_CTRL, PRIO_CTRL, tarefa_controle);
-    create_task(ID_INJ, PRIO_INJ, tarefa_injecao);
+    create_task(ID_CTRL, PRIO_CTRL, tarefa_controle_central);
+    create_task(ID_INJ, PRIO_INJ, tarefa_injecao_eletronica);
 
-    asm("global _tarefa_acelerador, _tarefa_controle, _tarefa_injecao, _tarefa_estabilidade");
+    asm("global _tarefa_acelerador, _tarefa_controle_central, _tarefa_injecao_eletronica, _tarefa_controle_estabilidade");
 }

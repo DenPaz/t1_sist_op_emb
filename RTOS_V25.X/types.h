@@ -4,7 +4,6 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <xc.h>
-
 #include "config.h"
 
 #define RR_SCHEDULER 1

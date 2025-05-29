@@ -24,7 +24,6 @@ void sem_wait(sem_t *sem)
         // Bloqueia a tarefa
         sem->s_queue[sem->s_size] = r_queue.task_running;
         sem->s_size = (sem->s_size + 1) % MAX_USER_TASKS;
-        // Força a preempção
         SAVE_CONTEXT(SEM_WAITING);
         scheduler();
         RESTORE_CONTEXT();

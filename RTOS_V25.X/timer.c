@@ -31,12 +31,20 @@ void start_timer0()
 void __interrupt() ISR_TMR0()
 {
     di();
-
-    // Se houve interrupção externa INT0, limpa flag e cria tarefa one-shot
     if (INTCONbits.INT0IF)
     {
         INTCONbits.INT0IF = 0;
-        create_task(ID_EST, PRIO_EST, tarefa_estabilidade);
+        if (INTCON2bits.INTEDG0)
+        {
+            LATDbits.LATD2 = 1;
+            INTCON2bits.INTEDG0 = 0;
+        }
+        else
+        {
+            LATDbits.LATD2 = 0;
+            INTCON2bits.INTEDG0 = 1;
+        }
+        create_task(ID_EST, PRIO_EST, tarefa_controle_estabilidade);
     }
 
     // Seta o flag do timer em zero

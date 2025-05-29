@@ -18,8 +18,6 @@ typedef struct sem
 typedef struct mutex
 {
     bool flag;
-
-    // forma dois
     uint8_t s_queue[MAX_USER_TASKS];
     uint8_t s_size;
     uint8_t s_pos_out;
