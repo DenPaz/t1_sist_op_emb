@@ -6,86 +6,143 @@
 #include "io.h"
 #include "config.h"
 
-// Recursos compartilhados
-pipe_t pipe;
-mutex_t m;
-uint16_t shared_buffer;
-
 TASK tarefa_acelerador(void)
 {
     uint16_t pos;
+    uint8_t acel;
+
+    LATDbits.LATD2 = 0;
+
+#define N_READINGS 3
+
+    uint16_t readings[N_READINGS] = {0};
+    uint8_t index = 0;
+    uint32_t sum = 0;
+
     while (1)
     {
-        pos = adc_read(0);                        // lê pedal
-        write_pipe(&pipe, (uint8_t)(pos >> 8));   // envia MSB
-        write_pipe(&pipe, (uint8_t)(pos & 0xFF)); // envia LSB
-        LATDbits.LATD0 = !LATDbits.LATD0;         // pisca LED ACEL
-        delay(10);
+        sum -= readings[index];
+        readings[index] = adc_read(0);
+        sum += readings[index];
+        index = (index + 1) % N_READINGS;
+        pos = (uint16_t)(sum / N_READINGS);
+
+        if (pos > 512)
+        {
+            LATDbits.LATD2 = 1; // LED ACEL ligado
+        }
+        else
+        {
+            LATDbits.LATD2 = 0; // LED ACEL desligado
+        }
+        acel = (uint8_t)(pos >> 2);
+        write_pipe(&pipe_acel, acel);
+        delay(25);
     }
 }
 
 TASK tarefa_controle_central(void)
 {
-    uint8_t hi, lo;
-    uint16_t pos, duty, max;
+    uint8_t pos;
     while (1)
     {
-        read_pipe(&pipe, &hi);
-        read_pipe(&pipe, &lo);
-        pos = ((uint16_t)hi << 8) | lo;
-
-        max = ((uint16_t)PR2 + 1) * 4 - 1;
-        duty = (pos * max) / 1023; // mapeia 0-1023 → duty
-
-        mutex_lock(&m);
-        shared_buffer = duty;
-        mutex_unlock(&m);
-
-        LATDbits.LATD1 = !LATDbits.LATD1; // pisca LED CTRL
+        read_pipe(&pipe_acel, &pos);
+        mutex_lock(&mutex_injecao);
+        tempo_injecao = pos * 4; // 0-255 -> 0-1020us
+        mutex_unlock(&mutex_injecao);
+        delay(10);
     }
 }
 
 TASK tarefa_injecao_eletronica(void)
 {
-    uint16_t duty;
     while (1)
     {
-        mutex_lock(&m);
-        duty = shared_buffer;
-        mutex_unlock(&m);
-
-        pwm_set_duty(1, duty); // CCP1 (RC2)
-        pwm_set_duty(2, duty); // CCP2 (RC1)
-
-        delay(1); // aguarda PWM estabilizar
+        mutex_lock(&mutex_injecao);
+        uint16_t tempo;
+        if (freio_ativo)
+        {
+            tempo = 0; // Freio ativo, não injeta
+        }
+        else
+        {
+            tempo = tempo_injecao; // Tempo de injeção calculado
+        }
+        mutex_unlock(&mutex_injecao);
+        if (tempo > 255)
+        {
+            pwm_set_duty(1, 255); // Limita o duty cycle máximo
+        }
+        else
+        {
+            pwm_set_duty(1, tempo);
+        }
+        delay(5);
     }
 }
 
 TASK tarefa_controle_estabilidade(void)
 {
-    LATDbits.LATD2 = 1; // LED ESTABILIDADE ligado
+    freio_ativo = 1; // Ativa o freio
+    while (PORTBbits.RB0 == 0)
+    {
+        LATDbits.LATD1 = 1;
+        LATDbits.LATD2 = ~LATDbits.LATD2;
+        mutex_lock(&mutex_injecao);
+        tempo_injecao = 0; // Desativa a injeção
+        mutex_unlock(&mutex_injecao);
+        delay(100); // Aguarda 100ms
+    }
+
+    LATDbits.LATD3 = 0;
+    LATDbits.LATD4 = 0;
+    freio_ativo = 0;
+    tarefa_ce_ativa = 0;
+    delete_task(tarefa_controle_estabilidade);
+
     while (1)
-        ; // permanece ativa (one-shot)
+    {
+        yield(); // Mantém a tarefa inativa
+        LATDbits.LATD2 = 1;
+    }
+}
+
+void user_interrupt(void)
+{
+    if (INTCONbits.INT0IF)
+    {
+        INTCONbits.INT0IF = 0;
+        __delay_ms(20);
+        if (PORTBbits.RB0 && !tarefa_ce_ativa)
+        {
+            freio_ativo = 1;
+            tarefa_ce_ativa = 1;
+            create_task(4, 4, tarefa_controle_estabilidade);
+        }
+    }
 }
 
 void user_config(void)
 {
-    TRISAbits.TRISA0 = 1; // AN0 (pedal) como entrada
-    TRISDbits.TRISD0 = 0; // LED ACEL = saída
-    TRISDbits.TRISD1 = 0; // LED CTRL = saída
-    TRISDbits.TRISD2 = 0; // LED ESTABILIDADE = saída
-    TRISDbits.TRISD7 = 0; // LED IDLE (debug)
+    create_pipe(&pipe_acel, 10);
+    mutex_init(&mutex_injecao);
 
     adc_init();
-    pwm_init();
-    extint_init();
+    pwm_init(1);
 
-    mutex_init(&m);
-    create_pipe(&pipe, PIPE_SIZE);
+    TRISDbits.RD2 = 0; // LED ACEL
+    TRISDbits.RD3 = 0; // LED CTRL
+    TRISDbits.RD4 = 0; // LED ESTABILIDADE
+    TRISDbits.RD7 = 0; // LED IDLE (debug)
+    LATD = 0x00;       // Todos LEDs desligados
 
-    create_task(ID_ACEL, PRIO_ACEL, tarefa_acelerador);
-    create_task(ID_CTRL, PRIO_CTRL, tarefa_controle_central);
-    create_task(ID_INJ, PRIO_INJ, tarefa_injecao_eletronica);
+    TRISBbits.TRISB0 = 1; // RB0 como entrada
+
+    ext_int_init(0, 0);
+
+    create_task(1, 3, tarefa_acelerador);
+    create_task(2, 2, tarefa_controle_central);
+    create_task(3, 1, tarefa_injecao_eletronica);
 
     asm("global _tarefa_acelerador, _tarefa_controle_central, _tarefa_injecao_eletronica, _tarefa_controle_estabilidade");
 }

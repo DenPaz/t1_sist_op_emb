@@ -1,9 +1,9 @@
+#include <stdint.h>
 #include "kernel.h"
 #include "scheduler.h"
 #include "user_app.h"
 #include "timer.h"
 #include "config.h"
-#include "scheduler.h"
 #include "mem.h"
 
 // Declara fila de aptos
@@ -27,6 +27,30 @@ void create_task(uint8_t id, uint8_t priority, f_ptr task)
 
     r_queue.ready_queue[r_queue.ready_queue_size] = new_task;
     r_queue.ready_queue_size += 1;
+}
+
+void delete_task(f_ptr task)
+{
+    if (task == NULL || task == idle)
+    {
+        return; // Não pode deletar a tarefa idle
+    }
+    di();
+    for (uint8_t i = 0; i < r_queue.ready_queue_size; i++)
+    {
+        if (r_queue.ready_queue[i].task_f == task)
+        {
+            // Move as tarefas restantes para preencher o espaço
+            for (uint8_t j = i; j < r_queue.ready_queue_size - 1; j++)
+            {
+                r_queue.ready_queue[j] = r_queue.ready_queue[j + 1];
+            }
+            r_queue.ready_queue_size--;
+            break;
+        }
+    }
+    RESTORE_CONTEXT();
+    ei();
 }
 
 void delay(uint16_t time)
@@ -66,7 +90,6 @@ void os_init()
 void os_start()
 {
 #if DEFAULT_SCHEDULER == PRIORITY_SCHEDULER
-    scheduler();
 #endif
     user_config();
     // Habilita as interrupções

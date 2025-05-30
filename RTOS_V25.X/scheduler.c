@@ -32,16 +32,22 @@ void __reentrant rr_scheduler()
 void __reentrant priority_scheduler()
 {
     uint8_t highest_priority = 0;
-    uint8_t selected = 0;
-
+    uint8_t selected_task = 0;
     for (uint8_t i = 1; i < r_queue.ready_queue_size; i++)
     {
         if (r_queue.ready_queue[i].task_state == READY &&
             r_queue.ready_queue[i].task_priority > highest_priority)
         {
             highest_priority = r_queue.ready_queue[i].task_priority;
-            selected = i;
+            selected_task = i;
         }
     }
-    r_queue.task_running = selected;
+    if (selected_task == 0 && highest_priority == 0)
+    {
+        r_queue.task_running = 0;
+    }
+    else
+    {
+        r_queue.task_running = selected_task;
+    }
 }

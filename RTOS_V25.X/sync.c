@@ -1,8 +1,8 @@
+#include <xc.h>
 #include "sync.h"
 #include "types.h"
 #include "kernel.h"
 #include "scheduler.h"
-#include <xc.h>
 
 // Declara fila de aptos
 extern ready_queue_t r_queue;
@@ -47,46 +47,53 @@ void sem_post(sem_t *sem)
 // API para o mutex
 void mutex_init(mutex_t *m)
 {
-    m->flag = true; // Seção crítica livre
+    m->flag = false;
+    m->owner = 0;
     m->s_size = 0;
-    m->s_pos_out = 0;
 }
 
 void mutex_lock(mutex_t *m)
 {
     di();
-    if (m->flag)
+    if (!m->flag)
     {
-        // Adquire o mutex
-        m->flag = false;
-        ei();
+        m->flag = true;
+        m->owner = r_queue.task_running;
     }
     else
     {
-        // Bloqueia a tarefa atual
-        m->s_queue[m->s_size] = r_queue.task_running;
-        m->s_size = (m->s_size + 1) % MAX_USER_TASKS;
+        if (m->s_size < MAX_USER_TASKS)
+        {
+            m->s_queue[m->s_size++] = r_queue.task_running;
+        }
         SAVE_CONTEXT(SEM_WAITING);
         scheduler();
         RESTORE_CONTEXT();
-        ei();
     }
+    ei();
 }
 
 void mutex_unlock(mutex_t *m)
 {
     di();
-    if (m->s_pos_out != m->s_size)
+    if (m->flag && m->owner == r_queue.task_running)
     {
-        // Desbloqueia a próxima tarefa na fila
-        uint8_t next = m->s_queue[m->s_pos_out];
-        r_queue.ready_queue[next].task_state = READY;
-        m->s_pos_out = (m->s_pos_out + 1) % MAX_USER_TASKS;
-    }
-    else
-    {
-        // Nenhuma tarefa bloqueada, libera o mutex
-        m->flag = true;
+        if (m->s_size > 0)
+        {
+            uint8_t next = m->s_queue[0];
+            for (uint8_t i = 0; i < m->s_size; i++)
+            {
+                m->s_queue[i - 1] = m->s_queue[i];
+            }
+            m->s_size--;
+            m->owner = next;
+            r_queue.ready_queue[next].task_state = READY;
+        }
+        else
+        {
+            m->flag = false;
+            m->owner = 0;
+        }
     }
     ei();
 }

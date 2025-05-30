@@ -27,39 +27,19 @@ void start_timer0()
     T0CONbits.TMR0ON = 1;
 }
 
+extern volatile uint8_t freio_ativo;
+
 // Tratador de interrupção do timer
-void __interrupt() ISR_TMR0()
+void __interrupt() INTERRUPT_Handler()
 {
-    di();
-    if (INTCONbits.INT0IF)
+    user_interrupt();
+    if (INTCONbits.TMR0IF)
     {
-        INTCONbits.INT0IF = 0;
-        if (INTCON2bits.INTEDG0)
-        {
-            LATDbits.LATD2 = 1;
-            INTCON2bits.INTEDG0 = 0;
-        }
-        else
-        {
-            LATDbits.LATD2 = 0;
-            INTCON2bits.INTEDG0 = 1;
-        }
-        create_task(ID_EST, PRIO_EST, tarefa_controle_estabilidade);
+        INTCONbits.TMR0IF = 0;
+        TMR0 = 0;
+        decrease_time();
+        SAVE_CONTEXT(READY);
+        scheduler();
+        RESTORE_CONTEXT();
     }
-
-    // Seta o flag do timer em zero
-    INTCONbits.TMR0IF = 0;
-    // Zera o contador
-    TMR0 = 0;
-
-    // Decrementa o delay das tarefas que estão em estado WAITING
-    decrease_time();
-
-    // Salva contexto da tarefa atual e chama escalonador
-    SAVE_CONTEXT(READY);
-    scheduler();
-    // Restaura contexto da próxima tarefa
-    RESTORE_CONTEXT();
-
-    ei();
 }
