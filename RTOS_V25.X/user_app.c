@@ -11,7 +11,7 @@ TASK tarefa_acelerador(void)
     uint16_t pos;
     uint8_t acel;
 
-    LATDbits.LATD2 = 0;
+    LATDbits.LATD0 = 0;
 
 #define N_READINGS 3
 
@@ -29,11 +29,11 @@ TASK tarefa_acelerador(void)
 
         if (pos > 512)
         {
-            LATDbits.LATD2 = 1; // LED ACEL ligado
+            LATDbits.LATD0 = 1; // LED ACEL ligado
         }
         else
         {
-            LATDbits.LATD2 = 0; // LED ACEL desligado
+            LATDbits.LATD0 = 0; // LED ACEL desligado
         }
         acel = (uint8_t)(pos >> 2);
         write_pipe(&pipe_acel, acel);
@@ -94,8 +94,8 @@ TASK tarefa_controle_estabilidade(void)
         delay(100); // Aguarda 100ms
     }
 
-    LATDbits.LATD3 = 0;
-    LATDbits.LATD4 = 0;
+    LATDbits.LATD1 = 0;
+    LATDbits.LATD2 = 0;
     freio_ativo = 0;
     tarefa_ce_ativa = 0;
     delete_task(tarefa_controle_estabilidade);
@@ -103,7 +103,7 @@ TASK tarefa_controle_estabilidade(void)
     while (1)
     {
         yield(); // Mantém a tarefa inativa
-        LATDbits.LATD2 = 1;
+        LATDbits.LATD0 = 1;
     }
 }
 
@@ -130,9 +130,9 @@ void user_config(void)
     adc_init();
     pwm_init(1);
 
-    TRISDbits.RD2 = 0; // LED ACEL
-    TRISDbits.RD3 = 0; // LED CTRL
-    TRISDbits.RD4 = 0; // LED ESTABILIDADE
+    TRISDbits.RD0 = 0; // LED ACEL
+    TRISDbits.RD1 = 0; // LED CTRL
+    TRISDbits.RD2 = 0; // LED ESTABILIDADE
     TRISDbits.RD7 = 0; // LED IDLE (debug)
     LATD = 0x00;       // Todos LEDs desligados
 
